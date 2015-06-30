@@ -1,0 +1,9 @@
+# Eclipse specific directories
+bin/
+gen/
+
+# Maven specific directories
+target/
+
+# Mac specific file
+.DS_Store
