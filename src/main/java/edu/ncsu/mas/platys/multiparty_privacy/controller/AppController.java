@@ -27,6 +27,14 @@ public class AppController {
 
   @Autowired
   MessageSource messageSource;
+  
+  /*
+   * This method will list all existing employees.
+   */
+  @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.GET)
+  public String showQuestionnaire(ModelMap model) {
+    return "questionnaire";
+  }
 
   /*
    * This method will list all existing employees.
