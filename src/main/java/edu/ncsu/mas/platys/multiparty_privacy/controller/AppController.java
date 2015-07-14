@@ -27,19 +27,11 @@ public class AppController {
 
   @Autowired
   MessageSource messageSource;
-  
-  /*
-   * This method will list all existing employees.
-   */
-  @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.GET)
-  public String showQuestionnaire(ModelMap model) {
-    return "questionnaire";
-  }
 
   /*
    * This method will list all existing employees.
    */
-  @RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
+  @RequestMapping(value = { "/list" }, method = RequestMethod.GET)
   public String listEmployees(ModelMap model) {
 
     List<Employee> employees = service.findAllEmployees();
@@ -136,5 +128,26 @@ public class AppController {
     service.deleteEmployeeBySsn(ssn);
     return "redirect:/list";
   }
+  
+  /*
+   * This method will list all existing employees.
+   */
+  @RequestMapping(value = { "/", "/signin" }, method = RequestMethod.GET)
+  public String showSignIn(ModelMap model) {
 
+    // List<Employee> employees = service.findAllEmployees();
+    // model.addAttribute("employees", employees);
+    return "signin";
+  }
+
+  /*
+   * This method will show a questionnaire.
+   */
+  @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.GET)
+  public String showQuestionnaire(ModelMap model) {
+    model.addAttribute("imageName", "family-lowSens.png");
+    model.addAttribute("imageDescription",
+        "Three members of a family (A, B, and C) took the picture below...");
+    return "questionnaire";
+  }
 }
