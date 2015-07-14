@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,12 +59,9 @@
 
 		<div class="page-header">
 			<h1>Scenario 1</h1>
-			<p class="lead">A group of four friends (A, B, C, and D) took the
-				picture below during a concert of their favorite band. A owns the
-				camera in which the picture was taken. The day after the concert, A
-				plans to upload the photo to Facebook and to tag all four friends.
-				They discuss a privacy policy for the photo and provide the the
-				following arguments.</p>
+			<p class="lead">${imageDescription}</p>
+			<img src="resources/images/${imageName}"
+				class="img-responsive center-block" alt="Responsive image">
 			<ul class="lead">
 				<li>A tells the other three that he’s going to share the photo
 					with everybody because he thinks the photo is cool and he wants
@@ -78,8 +76,6 @@
 					only common friends can see the photo because it’s a photo where he
 					appears and he doesn’t want unknown people to see him.
 			</ul>
-			<img src="resources/images/friends-at-a-concert.png"
-				class="img-responsive center-block" alt="Responsive image">
 
 			<h2>What privacy policy do you think should be applied to the
 				photo?</h2>
