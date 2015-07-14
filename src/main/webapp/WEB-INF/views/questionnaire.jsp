@@ -108,7 +108,7 @@
 						</label>
 					</div>
 				</div>
-				<div class="row form-group">
+				<div class="form-group">
 					<input placeholder="Enter other policy" type="text" class="form-control"
 						id="otherPolicy" name="otherPolicy" maxlength="10"
 						data-rule-required="true" contenteditable="false">
