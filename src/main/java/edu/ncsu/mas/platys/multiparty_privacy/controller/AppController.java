@@ -11,15 +11,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import edu.ncsu.mas.platys.multiparty_privacy.model.Employee;
+import edu.ncsu.mas.platys.multiparty_privacy.model.Turker;
 import edu.ncsu.mas.platys.multiparty_privacy.service.EmployeeService;
 
 @Controller
 @RequestMapping("/")
+@SessionAttributes("userName")
 public class AppController {
 
   @Autowired
@@ -134,20 +138,22 @@ public class AppController {
    */
   @RequestMapping(value = { "/", "/signin" }, method = RequestMethod.GET)
   public String showSignIn(ModelMap model) {
-
-    // List<Employee> employees = service.findAllEmployees();
-    // model.addAttribute("employees", employees);
+    model.addAttribute("turker", new Turker());
     return "signin";
   }
 
   /*
    * This method will show a questionnaire.
    */
-  @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.GET)
-  public String showQuestionnaire(ModelMap model) {
-    model.addAttribute("imageName", "family-lowSens.png");
-    model.addAttribute("imageDescription",
+  @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.POST)
+  public String showQuestionnaire(@ModelAttribute("turker") Turker turker, ModelMap model) {
+    if (turker.getMturkID() != null && !turker.getMturkID().isEmpty()) {
+      model.addAttribute("imageName", "family-lowSens.png");
+      model.addAttribute("imageDescription",
         "Three members of a family (A, B, and C) took the picture below...");
-    return "questionnaire";
+      return "questionnaire";
+    } else {
+      return "signin_failure";
+    }
   }
 }

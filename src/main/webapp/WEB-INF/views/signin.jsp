@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+	
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,14 +36,17 @@
 
 	<div class="container">
 
-		<form class="form-signin">
+		<form:form class="form-signin" action="questionnaire"
+			modelAttribute="turker" method="POST">
 			<h2 class="form-signin-heading">Please sign in</h2>
-			<label for="inputID" class="sr-only">Amazon Mechanical Turk ID</label> 
-			<input type="email" id="inputEmail" class="form-control" 
-			  placeholder="Amazon Mechanical Turk ID" required autofocus>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
-				in</button>
-		</form>
+			<label for="mturkID" class="sr-only">
+			  Amazon Mechanical Turk ID</label>
+			<form:input class="form-control" path="mturkID"
+				placeholder="Amazon Mechanical Turk ID" required="required"
+				autofocus="autofocus" />
+			<button class="btn btn-lg btn-primary btn-block" type="submit">
+				Sign in</button>
+		</form:form>
 
 	</div>
 	<!-- /container -->
