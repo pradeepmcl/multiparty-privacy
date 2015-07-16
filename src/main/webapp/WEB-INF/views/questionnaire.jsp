@@ -71,9 +71,9 @@
 				following questionnaire...</p>
 
 			<h2>Picture</h2>
-			<img src="resources/images/${imageName}"
+			<img src="resources/images/${scenario.image.name}"
 				class="img-responsive center-block" alt="Responsive image">
-		  <p class="lead">${imageDescription}</p>
+		  <p class="lead">${scenario.image.description}</p>
 			<p class="lead">${imageOwner} owns the camera in which the picture
 				was taken...</p>
 				

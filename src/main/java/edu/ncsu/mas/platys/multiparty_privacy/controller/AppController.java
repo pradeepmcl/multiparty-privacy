@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import javax.validation.Valid;
 
@@ -17,22 +18,27 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import edu.ncsu.mas.platys.multiparty_privacy.model.Employee;
+import edu.ncsu.mas.platys.multiparty_privacy.model.Scenario;
 import edu.ncsu.mas.platys.multiparty_privacy.model.Turker;
 import edu.ncsu.mas.platys.multiparty_privacy.service.EmployeeService;
+import edu.ncsu.mas.platys.multiparty_privacy.service.ScenarioService;
 
 @Controller
 @RequestMapping("/")
-@SessionAttributes("userName")
 public class AppController {
 
   @Autowired
-  EmployeeService service;
+  EmployeeService employeeService;
 
   @Autowired
+  ScenarioService scenarioService;
+  
+  @Autowired
   MessageSource messageSource;
+  
+  Random rand = new Random();
 
   /*
    * This method will list all existing employees.
@@ -40,7 +46,7 @@ public class AppController {
   @RequestMapping(value = { "/list" }, method = RequestMethod.GET)
   public String listEmployees(ModelMap model) {
 
-    List<Employee> employees = service.findAllEmployees();
+    List<Employee> employees = employeeService.findAllEmployees();
     model.addAttribute("employees", employees);
     return "allemployees";
   }
@@ -77,14 +83,14 @@ public class AppController {
      * using internationalized messages.
      * 
      */
-    if (!service.isEmployeeSsnUnique(employee.getId(), employee.getSsn())) {
+    if (!employeeService.isEmployeeSsnUnique(employee.getId(), employee.getSsn())) {
       FieldError ssnError = new FieldError("employee", "ssn", messageSource
           .getMessage("non.unique.ssn", new String[] { employee.getSsn() }, Locale.getDefault()));
       result.addError(ssnError);
       return "registration";
     }
 
-    service.saveEmployee(employee);
+    employeeService.saveEmployee(employee);
 
     model.addAttribute("success", "Employee " + employee.getName() + " registered successfully");
     return "success";
@@ -95,7 +101,7 @@ public class AppController {
    */
   @RequestMapping(value = { "/edit-{ssn}-employee" }, method = RequestMethod.GET)
   public String editEmployee(@PathVariable String ssn, ModelMap model) {
-    Employee employee = service.findEmployeeBySsn(ssn);
+    Employee employee = employeeService.findEmployeeBySsn(ssn);
     model.addAttribute("employee", employee);
     model.addAttribute("edit", true);
     return "registration";
@@ -113,14 +119,14 @@ public class AppController {
       return "registration";
     }
 
-    if (!service.isEmployeeSsnUnique(employee.getId(), employee.getSsn())) {
+    if (!employeeService.isEmployeeSsnUnique(employee.getId(), employee.getSsn())) {
       FieldError ssnError = new FieldError("employee", "ssn", messageSource
           .getMessage("non.unique.ssn", new String[] { employee.getSsn() }, Locale.getDefault()));
       result.addError(ssnError);
       return "registration";
     }
 
-    service.updateEmployee(employee);
+    employeeService.updateEmployee(employee);
 
     model.addAttribute("success", "Employee " + employee.getName() + " updated successfully");
     return "success";
@@ -131,7 +137,7 @@ public class AppController {
    */
   @RequestMapping(value = { "/delete-{ssn}-employee" }, method = RequestMethod.GET)
   public String deleteEmployee(@PathVariable String ssn) {
-    service.deleteEmployeeBySsn(ssn);
+    employeeService.deleteEmployeeBySsn(ssn);
     return "redirect:/list";
   }
   
@@ -153,9 +159,11 @@ public class AppController {
     if (isMturkIDValid(mturkID)) {
       model.addAttribute("mturkID", mturkID);
       
-      model.addAttribute("imageName", "family-lowSens.png");
-      model.addAttribute("imageDescription",
-        "Three members of a family (A, B, and C) took the picture below...");
+      long scenarioCount = scenarioService.getCount();
+      int randomScenario = getARandomScenarion(scenarioCount);
+      Scenario scenario = scenarioService.findById(randomScenario);
+      
+      model.addAttribute("scenario", scenario);
       
       model.addAttribute("imageOwner", "A");
       model.addAttribute("imageUploader", "B");
@@ -186,5 +194,21 @@ public class AppController {
       return true;
     }
     return false;
+  }
+  
+  private int getARandomScenarion(long scenarioCount) {
+    return randInt(1, (int) scenarioCount);
+  }
+  
+  /**
+   * Returns a pseudo-random number between min and max, inclusive. The
+   * difference between min and max can be at most
+   * <code>Integer.MAX_VALUE - 1</code>.
+   */
+  private int randInt(int min, int max) {
+    // nextInt is normally exclusive of the top value,
+    // so add 1 to make it inclusive
+    int randomNum = rand.nextInt((max - min) + 1) + min;
+    return randomNum;
   }
 }
