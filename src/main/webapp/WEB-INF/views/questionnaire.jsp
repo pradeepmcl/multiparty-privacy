@@ -76,40 +76,61 @@
 		  <p class="lead">${imageDescription}</p>
 			<p class="lead">${imageOwner} owns the camera in which the picture
 				was taken...</p>
+				
+		  <h2>Privacy Policies and Arguments</h2>
 			<p class="lead">Now, ${imageUploader} decides to upload the
 				picture to Facebook. A, B, C argue about an appropriate privacy
 				policy for the picture. The following are their arguments...</p>
 
-			<dl class="dl-horizontal lead">
-				<c:forEach items="${arguments}" var="argument">
-					<dt>${argument.key}:</dt>
-					<dd>${policies[argument.key]}. ${argument.value}</dd>
-				</c:forEach>
-			</dl>
+			<table class="table table-hover table-condensed lead">
+			  <tr>
+			    <td><b>User</b></td>
+			    <td><b>Privacy Policy</b></td>
+			    <td><b>Argument</b></td>
+			    
+			    <c:forEach items="${arguments}" var="argument">
+			    <tr>
+			      <td>${argument.key}</td>
+            <td>${policies[argument.key]}</td> 
+            <td>${argument.value}</td>
+          </tr>
+			    </c:forEach>
+			  </tr>
+			</table>
+			
 			
 			<h2>Questionnaire</h2>
 
 			<ol class="lead">
 				<li>
-				  <h3>What privacy policy do you think should be applied to the picture?</h3> 
-					<c:forEach items="${policies}" var="policy">
-						<div class="radio">
-							<label> <input type="radio" name="policyRadios"
-								id="policyRadios${policy.key}" value="policy${policy.key}">${policy.value}
-							</label>
-						</div>
-					</c:forEach>
-					<div class="radio">
-						<label> <input type="radio" name="policyRadios"
-							id="policyRadiosOther" value="policyOther">Other <input
-							type="text" class="form-control">
-						</label>
-					</div>
+				  <h3>What privacy policy do you think should be applied to the picture?</h3>
+				  <form class="form-horizontal"> 
+					  <c:forEach items="${policies}" var="policy">
+						  <div class="radio">
+							  <label> <input type="radio" name="policyRadios" 
+							    id="policyRadios${policy.key}" 
+							    value="policy${policy.key}">${policy.value}
+							  </label>
+						  </div>
+					  </c:forEach>
+					  <div class="form-group">
+					    <div class="col-sm-2 radio">
+						    <label> 
+						      <input type="radio" name="policyRadios" id="policyRadiosOther" 
+						        value="policyOther">Other:
+						    </label>
+					    </div>
+					    <div class="col-sm-8">
+					      <input type="text" class="form-control" placeholder="Enter the other policy">
+					    </div>
+					  </div>
+					</form>
 				</li>
 
 				<li>
-				  <h3>Why?</h3>
-				  <textarea class="form-control" rows="3"></textarea>
+				  <h3>Why did you choose the above policy?</h3> 
+				  <textarea class="form-control" rows="3"
+						placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context"></textarea>
 				</li>
 			</ol>
 			<div class="text-center lead"> 
