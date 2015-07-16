@@ -65,23 +65,24 @@
 
 
 		<!-- Main component for a primary marketing message or call to action -->
-		<div class="jumbotron">
-		  <h2>Task Description</h2>
-			<p class="lead">Read the picture and its description below and
-				answer the following questionnaire...</p>
+		<div class="jumbotron lead">
+		  <h2>Task</h2>
+			<p>Read the picture and its description below and answer the
+				following questionnaire...</p>
 
-			<h2>Picture and Context</h2>
+			<h2>Picture</h2>
 			<img src="resources/images/${imageName}"
 				class="img-responsive center-block" alt="Responsive image">
 		  <p class="lead">${imageDescription}</p>
 			<p class="lead">${imageOwner} owns the camera in which the picture
 				was taken...</p>
 				
-		  <h2>Privacy Policies and Arguments</h2>
-			<p class="lead">Now, ${imageUploader} decides to upload the
-				picture to Facebook. A, B, C argue about an appropriate privacy
-				policy for the picture. The following are their arguments...</p>
+		  <h2>Privacy Policies</h2>
+			<p>Now, ${imageUploader} decides to upload the picture to
+				Facebook. A, B, C argue about an appropriate privacy policy for the
+				picture. The following are their arguments...</p>
 
+			<!-- 
 			<table class="table table-hover table-condensed lead">
 			  <tr>
 			    <td><b>User</b></td>
@@ -96,12 +97,19 @@
           </tr>
 			    </c:forEach>
 			  </tr>
-			</table>
-			
-			
+			</table>-->
+			<ul class="list-group">
+				<c:forEach items="${arguments}" var="argument">
+					<li class="list-group-item">
+						<b>${argument.key}: </b> ${policies[argument.key]}. ${argument.value}
+					</li>
+				</c:forEach>
+			</ul>
+
+
 			<h2>Questionnaire</h2>
 
-			<ol class="lead">
+			<ol>
 				<li>
 				  <h3>What privacy policy do you think should be applied to the picture?</h3>
 				  <form class="form-horizontal"> 
@@ -117,10 +125,10 @@
 					    <div class="col-sm-2 radio">
 						    <label> 
 						      <input type="radio" name="policyRadios" id="policyRadiosOther" 
-						        value="policyOther">Other:
+						        value="policyOther">Other policy:
 						    </label>
 					    </div>
-					    <div class="col-sm-8">
+					    <div class="col-sm-10">
 					      <input type="text" class="form-control" placeholder="Enter the other policy">
 					    </div>
 					  </div>
@@ -133,7 +141,7 @@
 						placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context"></textarea>
 				</li>
 			</ol>
-			<div class="text-center lead"> 
+			<div class="text-center"> 
 				<button type="button" class="btn btn-primary btn-lg">Submit
 					Responses</button>
 			</div>

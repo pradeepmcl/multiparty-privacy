@@ -14,13 +14,26 @@ CREATE TABLE image (
   PRIMARY KEY (id)
 );
 
-insert into image(name, description) values 
-  ('family-lowSens.png', 'Three members of a family (A, B, and C) took the picture below...'),
-  ('family-medSens.png', 'Three members of a family (A, B, and C) took the picture below...'),
-  ('family-medSens.png', 'Three members of a family (A, B, and C) took the picture below...'),
-  ('friends-lowSens.png', 'Three friends (A, B, and C) took the picture below...'),
-  ('friends-medSens.png', 'Three friends (A, B, and C) took the picture below...'),
-  ('friends-highSens.png', 'Three friends (A, B, and C) took the picture below...'),
-  ('colleagues-lowSens.png', 'Three colleagues (A, B, and C) took the picture below...'),
-  ('colleagues-medSens.png', 'Three colleagues (A, B, and C) took the picture below...'),
-  ('colleagues-highSens.png', 'Three colleagues (A, B, and C) took the picture below...');
+CREATE TABLE policy (
+  id INT NOT NULL auto_increment, 
+  description VARCHAR(512) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE argument (
+  id INT NOT NULL auto_increment,
+  name VARCHAR(200) NOT NULL,
+  description VARCHAR(1024) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE scenario (
+  id INT NOT NULL auto_increment,
+  image_id INT NOT NULL,
+  policy_id INT NOT NULL,
+  argument_id INT NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (image_id) REFERENCES image(id),
+  FOREIGN KEY (policy_id) REFERENCES policy(id),
+  FOREIGN KEY (argument_id) REFERENCES argument(id)
+);
