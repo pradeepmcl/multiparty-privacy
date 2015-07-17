@@ -23,7 +23,7 @@
 
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-<script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+<!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -88,11 +88,15 @@
 				picture. The following are their arguments...</p>
 
 			<ul class="list-group">
-				<c:forEach items="${arguments}" var="argument">
-					<li class="list-group-item">
-						<b>${argument.key}: </b> ${policies[argument.key]}. ${argument.value}
-					</li>
-				</c:forEach>
+				<li class="list-group-item">
+          <b>A: </b> ${scenario.policyA.description}. ${scenario.argumentA.description}
+        </li>
+        <li class="list-group-item">
+          <b>B: </b> ${scenario.policyB.description}. ${scenario.argumentB.description}
+        </li>
+        <li class="list-group-item">
+          <b>C: </b> ${scenario.policyC.description}. ${scenario.argumentC.description}
+        </li>
 			</ul>
 		</div>
 
@@ -101,16 +105,28 @@
 			<ol>
 				<li>
 				  <h3>What privacy policy do you think should be applied to the picture?</h3>
-				  <form class="form-horizontal"> 
-					  <c:forEach items="${policies}" var="policy">
-						  <div class="radio">
-							  <label> <input type="radio" name="policyRadios" 
-							    id="policyRadios${policy.key}" 
-							    value="policy${policy.key}">${policy.value}
-							  </label>
-						  </div>
-					  </c:forEach>
-					  <div class="form-group">
+				  <div class="form-horizontal"> 
+					  <div class="radio">
+							<label> <input type="radio" name="policyRadios"
+								id="policyRadiosA" value="policyA">${scenario.policyA.description}
+							</label>
+						</div>
+						<c:if test="${scenario.policyB.description != scenario.policyA.description}">
+							<div class="radio">
+								<label> <input type="radio" name="policyRadios"
+									id="policyRadiosB" value="policyB">${scenario.policyB.description}
+								</label>
+							</div>
+						</c:if>
+						<c:if test="${scenario.policyC.description != scenario.policyA.description && 
+						    scenario.policyC.description != scenario.policyB.description}">
+							<div class="radio">
+								<label> <input type="radio" name="policyRadios"
+									id="policyRadiosC" value="policyC">${scenario.policyC.description}
+								</label>
+							</div>
+						</c:if>
+						<div class="form-group">
 					    <div class="col-sm-2 radio">
 						    <label> 
 						      <input type="radio" name="policyRadios" id="policyRadiosOther" 
@@ -121,7 +137,7 @@
 					      <input type="text" class="form-control" placeholder="Enter the other policy">
 					    </div>
 					  </div>
-					</form>
+					</div>
 				</li>
 
 				<li>
@@ -131,8 +147,7 @@
 				</li>
 			</ol>
 			<div class="text-center"> 
-				<button type="button" class="btn btn-primary btn-lg">Submit
-					Responses</button>
+				<input type="submit" class="btn btn-primary btn-lg" value="Submit Responses"/>
 			</div>
 		</div>
 
@@ -145,8 +160,8 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="../../dist/js/bootstrap.min.js"></script>
+	<script src="resources/js/bootstrap.min.js"></script>
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+	<!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
 </body>
 </html>

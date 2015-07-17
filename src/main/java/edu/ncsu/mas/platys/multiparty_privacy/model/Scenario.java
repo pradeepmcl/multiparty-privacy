@@ -26,12 +26,28 @@ public class Scenario {
   private Image image;
 
   @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "policy_id")
-  private Policy policy;
+  @JoinColumn(name = "policy_a_id")
+  private Policy policyA;
 
   @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "argument_id")
-  private Argument argument;
+  @JoinColumn(name = "argument_a_id")
+  private Argument argumentA;
+  
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "policy_B_id")
+  private Policy policyB;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "argument_b_id")
+  private Argument argumentB;
+  
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "policy_c_id")
+  private Policy policyC;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "argument_c_id")
+  private Argument argumentC;
 
   public int getId() {
     return id;
@@ -49,22 +65,53 @@ public class Scenario {
     this.image = image;
   }
 
-  public Policy getPolicy() {
-    return policy;
+  public Policy getPolicyA() {
+    return policyA;
   }
 
-  public void setPolicy(Policy policy) {
-    this.policy = policy;
+  public void setPolicyA(Policy policy) {
+    this.policyA = policy;
   }
 
-  public Argument getArgument() {
-    return argument;
+  public Argument getArgumentA() {
+    return argumentA;
   }
 
-  public void setArgument(Argument argument) {
-    this.argument = argument;
+  public void setArgumentA(Argument argument) {
+    this.argumentA = argument;
   }
 
+  public Policy getPolicyB() {
+    return policyB;
+  }
+
+  public void setPolicyB(Policy policy) {
+    this.policyB = policy;
+  }
+
+  public Argument getArgumentB() {
+    return argumentB;
+  }
+
+  public void setArgumentB(Argument argument) {
+    this.argumentB = argument;
+  }
+  
+  public Policy getPolicyC() {
+    return policyC;
+  }
+
+  public void setPolicyC(Policy policy) {
+    this.policyC = policy;
+  }
+
+  public Argument getArgumentC() {
+    return argumentC;
+  }
+
+  public void setArgumentC(Argument argument) {
+    this.argumentC = argument;
+  }
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -89,7 +136,7 @@ public class Scenario {
 
   @Override
   public String toString() {
-    return "Scenario [id=" + id + ", image.name=" + image.getName() + ", policy.name="
-        + policy.getName() + ", argument.name=" + argument.getName() + "]";
+    return "Scenario [id=" + id + ", image.name=" + image.getName() + ", policyA.name="
+        + policyA.getName() + ", argumentA.name=" + argumentA.getName() + "]";
   }
 }

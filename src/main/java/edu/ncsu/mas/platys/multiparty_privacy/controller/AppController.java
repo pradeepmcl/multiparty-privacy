@@ -1,9 +1,7 @@
 package edu.ncsu.mas.platys.multiparty_privacy.controller;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 import javax.validation.Valid;
@@ -167,19 +165,6 @@ public class AppController {
       
       model.addAttribute("imageOwner", "A");
       model.addAttribute("imageUploader", "B");
-      
-      Map<String, String> policies = new LinkedHashMap<String, String>();
-      policies.put("A", "Share with all");
-      policies.put("B", "Share among themselves (A, B, and C only)");
-      policies.put("C", "Share with common friends of A, B, and C");
-      model.addAttribute("policies", policies);
-      
-      
-      Map<String, String> arguments = new LinkedHashMap<String, String>();
-      arguments.put("A", "An argument from positive consequence...");
-      arguments.put("B", "An argument from negative consequence...");
-      arguments.put("C", "An argument from analogy...");
-      model.addAttribute("arguments", arguments);
       
       return "questionnaire";
     } else {
