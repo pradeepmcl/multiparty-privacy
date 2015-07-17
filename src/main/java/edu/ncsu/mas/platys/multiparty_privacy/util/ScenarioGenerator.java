@@ -124,13 +124,13 @@ public class ScenarioGenerator {
   }
   
   private boolean isPolicyCombinationValid(String... policyNames) {
-    boolean isValid = true;
+    boolean isValid = false;
     String firstPolicyName = policyNames[0];
     for (String policyName: policyNames) {
       if (!policyName.equals(firstPolicyName)) {
+        isValid = true;
         break;
       }
-      isValid = false;
     }
     return isValid;
   }

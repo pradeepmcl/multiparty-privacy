@@ -17,8 +17,9 @@ public class Scenario {
   /*
    * TODO: Two reasons for choosing eager initialization: (1) I think it is the
    * right option here, since we will use the objects for sure, and (2) I dont
-   * know how to fix the rg.hibernate.LazyInitializationException: could not
-   * initialize proxy - no Session , which I received using lazy initialization
+   * know how to fix the "org.hibernate.LazyInitializationException: could not
+   * initialize proxy - no Session" exception, which was thrown when I used lazy
+   * initialization
    */
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "image_id")
