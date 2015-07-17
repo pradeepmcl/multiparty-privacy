@@ -66,38 +66,27 @@
 
 		<!-- Main component for a primary marketing message or call to action -->
 		<div class="jumbotron lead">
-		  <h2>Task</h2>
+		  <h3>Task</h3>
 			<p>Read the picture and its description below and answer the
 				following questionnaire...</p>
+		</div>
 
-			<h2>Picture</h2>
-			<img src="resources/images/${scenario.image.name}"
-				class="img-responsive center-block" alt="Responsive image">
+    <div class="jumbotron lead">
+			<h3>Picture</h3>
 		  <p class="lead">${scenario.image.description}</p>
 			<p class="lead">${imageOwner} owns the camera in which the picture
 				was taken...</p>
+			<img src="resources/images/${scenario.image.name}"
+        class="img-responsive center-block" alt="Responsive image">
 				
-		  <h2>Privacy Policies</h2>
+		</div>
+				
+		<div class="jumbotron lead">
+		  <h3>Privacy Policies</h3>
 			<p>Now, ${imageUploader} decides to upload the picture to
 				Facebook. A, B, C argue about an appropriate privacy policy for the
 				picture. The following are their arguments...</p>
 
-			<!-- 
-			<table class="table table-hover table-condensed lead">
-			  <tr>
-			    <td><b>User</b></td>
-			    <td><b>Privacy Policy</b></td>
-			    <td><b>Argument</b></td>
-			    
-			    <c:forEach items="${arguments}" var="argument">
-			    <tr>
-			      <td>${argument.key}</td>
-            <td>${policies[argument.key]}</td> 
-            <td>${argument.value}</td>
-          </tr>
-			    </c:forEach>
-			  </tr>
-			</table>-->
 			<ul class="list-group">
 				<c:forEach items="${arguments}" var="argument">
 					<li class="list-group-item">
@@ -105,10 +94,10 @@
 					</li>
 				</c:forEach>
 			</ul>
+		</div>
 
-
-			<h2>Questionnaire</h2>
-
+    <div class="jumbotron lead">
+			<h3>Questionnaire</h3>
 			<ol>
 				<li>
 				  <h3>What privacy policy do you think should be applied to the picture?</h3>

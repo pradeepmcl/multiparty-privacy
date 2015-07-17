@@ -12,6 +12,9 @@ public class Policy {
   @Id
   private int id;
 
+  @Column(name = "name", nullable = false)
+  private String name;
+
   @Column(name = "description", nullable = false)
   private String description;
 
@@ -21,6 +24,14 @@ public class Policy {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getDescription() {
@@ -55,6 +66,6 @@ public class Policy {
 
   @Override
   public String toString() {
-    return "Policy [id=" + id + ", description=" + description + "]";
+    return "Policy [id=" + id + ", name=" + name + ", description=" + description + "]";
   }
 }

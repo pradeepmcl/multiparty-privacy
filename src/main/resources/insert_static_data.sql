@@ -9,10 +9,10 @@ insert into image(name, description) values
   ('colleagues-medSens.png', 'Three colleagues (A, B, and C) took the picture below...'),
   ('colleagues-highSens.png', 'Three colleagues (A, B, and C) took the picture below...');
   
-insert into policy(description) values
-  ('Share with all'),
-  ('Share with common friends of A, B, and C'),
-  ('Share among themselves (A, B, and C) only');
+insert into policy(name, description) values
+  ('all', 'Share with all'),
+  ('common', 'Share with common friends of A, B, and C'),
+  ('self', 'Share among themselves (A, B, and C) only');
   
 insert into argument(name, description) values 
   ('positive consequence', 'An argument from positive consequence...'),

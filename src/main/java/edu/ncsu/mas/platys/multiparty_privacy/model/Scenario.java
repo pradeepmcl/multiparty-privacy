@@ -88,7 +88,7 @@ public class Scenario {
 
   @Override
   public String toString() {
-    return "Scenario [id=" + id + ", image.name=" + image.getName() + ", policy.desc="
-        + policy.getDescription() + ", argument.name=" + argument.getName() + "]";
+    return "Scenario [id=" + id + ", image.name=" + image.getName() + ", policy.name="
+        + policy.getName() + ", argument.name=" + argument.getName() + "]";
   }
 }
