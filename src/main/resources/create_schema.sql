@@ -46,3 +46,14 @@ CREATE TABLE scenario (
   FOREIGN KEY (policy_c_id) REFERENCES policy(id),
   FOREIGN KEY (argument_c_id) REFERENCES argument(id)
 );
+
+CREATE TABLE turker_response (
+  id INT NOT NULL auto_increment,
+  mturk_id VARCHAR(20) NOT NULL,
+  response_time DATETIME NOT NULL,
+  scenario_id INT NOT NULL,
+  policy_response VARCHAR(200) NOT NULL,
+  completion_code VARCHAR(20) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (scenario_id) REFERENCES scenario(id)
+);

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.ncsu.mas.platys.multiparty_privacy.model.Employee;
 import edu.ncsu.mas.platys.multiparty_privacy.model.Scenario;
-import edu.ncsu.mas.platys.multiparty_privacy.model.Turker;
+import edu.ncsu.mas.platys.multiparty_privacy.model.TurkerResponse;
 import edu.ncsu.mas.platys.multiparty_privacy.service.EmployeeService;
 import edu.ncsu.mas.platys.multiparty_privacy.service.ScenarioService;
 
@@ -32,10 +32,10 @@ public class AppController {
 
   @Autowired
   ScenarioService scenarioService;
-  
+
   @Autowired
   MessageSource messageSource;
-  
+
   Random rand = new Random();
 
   /*
@@ -79,11 +79,10 @@ public class AppController {
      * Below mentioned peace of code [if block] is to demonstrate that you can
      * fill custom errors outside the validation framework as well while still
      * using internationalized messages.
-     * 
      */
     if (!employeeService.isEmployeeSsnUnique(employee.getId(), employee.getSsn())) {
-      FieldError ssnError = new FieldError("employee", "ssn", messageSource
-          .getMessage("non.unique.ssn", new String[] { employee.getSsn() }, Locale.getDefault()));
+      FieldError ssnError = new FieldError("employee", "ssn", messageSource.getMessage(
+          "non.unique.ssn", new String[] { employee.getSsn() }, Locale.getDefault()));
       result.addError(ssnError);
       return "registration";
     }
@@ -118,8 +117,8 @@ public class AppController {
     }
 
     if (!employeeService.isEmployeeSsnUnique(employee.getId(), employee.getSsn())) {
-      FieldError ssnError = new FieldError("employee", "ssn", messageSource
-          .getMessage("non.unique.ssn", new String[] { employee.getSsn() }, Locale.getDefault()));
+      FieldError ssnError = new FieldError("employee", "ssn", messageSource.getMessage(
+          "non.unique.ssn", new String[] { employee.getSsn() }, Locale.getDefault()));
       result.addError(ssnError);
       return "registration";
     }
@@ -138,40 +137,40 @@ public class AppController {
     employeeService.deleteEmployeeBySsn(ssn);
     return "redirect:/list";
   }
-  
+
   /*
    * This method will list all existing employees.
    */
   @RequestMapping(value = { "/", "/signin" }, method = RequestMethod.GET)
   public String showSignIn(ModelMap model) {
-    model.addAttribute("turker", new Turker());
+    model.addAttribute("turker_response", new TurkerResponse());
     return "signin";
   }
 
   /*
-   * This method will show a questionnaire.
+   * This method will show a questionnaire for the first time, and a
+   * confirmation code after submitting the form in the questionnaire.
    */
   @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.POST)
-  public String showQuestionnaire(@ModelAttribute("turker") Turker turker, ModelMap model) {
-    String mturkID = turker.getMturkID();
-    if (isMturkIDValid(mturkID)) {
-      model.addAttribute("mturkID", mturkID);
-      
-      long scenarioCount = scenarioService.getCount();
-      int randomScenario = getARandomScenarion(scenarioCount);
-      Scenario scenario = scenarioService.findById(randomScenario);
-      
-      model.addAttribute("scenario", scenario);
-      
-      model.addAttribute("imageOwner", "A");
-      model.addAttribute("imageUploader", "B");
-      
+  public String showQuestionnaire(@ModelAttribute("turker_response") TurkerResponse turkerResponse,
+      ModelMap model) {
+    if (turkerResponse.getPolicyResponse() != null && !turkerResponse.getPolicyResponse().isEmpty()) {
+      // TODO: Auto-generate completion code
+      turkerResponse.setCompletionCode("COMPLETE");
+      model.addAttribute("turker_response", turkerResponse);
+      return turkerResponse.getPolicyResponse();
+    } else if (isMturkIDValid(turkerResponse.getMturkId())) {
+      Scenario scenario = getARandomScenario();
+      turkerResponse.setScenario(scenario);
+      model.addAttribute("turker_response", turkerResponse);
+      // TODO: imageUploader should eventually be part of turker_response
+      model.addAttribute("imageUploader", "B"); 
       return "questionnaire";
     } else {
-      return "signin_failure";
+      return "signin_failure"; // TODO: Add this page
     }
   }
-  
+
   private boolean isMturkIDValid(String mturkID) {
     if (mturkID != null && !mturkID.isEmpty()) {
       // TODO: Check that the user does not exceed permitted number of HIT
@@ -180,11 +179,14 @@ public class AppController {
     }
     return false;
   }
-  
-  private int getARandomScenarion(long scenarioCount) {
-    return randInt(1, (int) scenarioCount);
+
+  private Scenario getARandomScenario() {
+    long scenarioCount = scenarioService.getCount();
+    int randomScenario = randInt(1, (int) scenarioCount);
+    Scenario scenario = scenarioService.findById(randomScenario);
+    return scenario;
   }
-  
+
   /**
    * Returns a pseudo-random number between min and max, inclusive. The
    * difference between min and max can be at most

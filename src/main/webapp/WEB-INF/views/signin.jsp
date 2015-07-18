@@ -37,11 +37,11 @@
 	<div class="container">
 
 		<form:form class="form-signin" action="questionnaire"
-			modelAttribute="turker" method="POST">
+			modelAttribute="turker_response" method="POST">
 			<h2 class="form-signin-heading">Please sign in</h2>
-			<label for="mturkID" class="sr-only">
+			<label for="mturkId" class="sr-only">
 			  Amazon Mechanical Turk ID</label>
-			<form:input class="form-control" path="mturkID"
+			<form:input class="form-control" path="mturkId"
 				placeholder="Amazon Mechanical Turk ID" required="required"
 				autofocus="autofocus" />
 			<button class="btn btn-lg btn-primary btn-block" type="submit">
