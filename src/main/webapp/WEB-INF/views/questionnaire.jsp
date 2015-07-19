@@ -106,6 +106,9 @@
    <h3>Questionnaire</h3>
 
    <form:form method="POST" modelAttribute="turker_response">
+    <form:input type="hidden" path="mturkId" id="mturkId" />
+    <form:input type="hidden" path="scenario.id" id="scenario.id" />
+    <form:input type="hidden" path="completionCode" id="started" /> <!-- TODO: remove -->
     <ol>
      <li>
       <h3>What privacy policy do you think should be applied to the
@@ -148,6 +151,7 @@
           placeholder="Enter the other policy">
         </div>
        </div>
+       <p><form:errors path="policyResponse" cssClass="error" /></p>
       </div>
      </li>
 

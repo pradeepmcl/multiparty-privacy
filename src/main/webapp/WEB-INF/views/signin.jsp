@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-	
+ pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +14,7 @@
 <meta name="author" content="">
 <link rel="icon" href="resources/favicon.ico">
 
-<title>Signin Template for Bootstrap</title>
+<title>Signin to Multiparty Privacy Study</title>
 
 <!-- Bootstrap core CSS -->
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
@@ -33,26 +34,23 @@
 </head>
 
 <body>
+ <div class="container">
+  <c:url var="postUrl" value="/questionnaire" />
+  <form:form class="form-signin" modelAttribute="turker_response"
+   method="POST" action="${postUrl}">
+   <h2 class="form-signin-heading">Please sign in</h2>
+   <label for="mturkId" class="sr-only"> Amazon Mechanical Turk
+    ID</label>
+   <form:input class="form-control" path="mturkId"
+    placeholder="Amazon Mechanical Turk ID" required="required"
+    autofocus="autofocus" />
+   <button class="btn btn-lg btn-primary btn-block" type="submit">
+    Sign in</button>
+  </form:form>
+ </div>
+ <!-- /container -->
 
-	<div class="container">
-
-		<form:form class="form-signin" action="questionnaire"
-			modelAttribute="turker_response" method="POST">
-			<h2 class="form-signin-heading">Please sign in</h2>
-			<label for="mturkId" class="sr-only">
-			  Amazon Mechanical Turk ID</label>
-			<form:input class="form-control" path="mturkId"
-				placeholder="Amazon Mechanical Turk ID" required="required"
-				autofocus="autofocus" />
-			<button class="btn btn-lg btn-primary btn-block" type="submit">
-				Sign in</button>
-		</form:form>
-
-	</div>
-	<!-- /container -->
-
-
-	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+ <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+ <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>

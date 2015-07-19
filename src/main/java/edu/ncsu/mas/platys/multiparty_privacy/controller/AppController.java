@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javax.validation.Valid;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -139,7 +140,7 @@ public class AppController {
   }
 
   /*
-   * This method will list all existing employees.
+   * This method shows the signin page.
    */
   @RequestMapping(value = { "/", "/signin" }, method = RequestMethod.GET)
   public String showSignIn(ModelMap model) {
@@ -148,26 +149,48 @@ public class AppController {
   }
 
   /*
-   * This method will show a questionnaire for the first time, and a
-   * confirmation code after submitting the form in the questionnaire.
+   * This method validates the signin ID amd loads the questionnaire page.
    */
   @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.POST)
-  public String showQuestionnaire(@ModelAttribute("turker_response") TurkerResponse turkerResponse,
-      ModelMap model) {
-    if (turkerResponse.getPolicyResponse() != null && !turkerResponse.getPolicyResponse().isEmpty()) {
-      // TODO: Auto-generate completion code
-      turkerResponse.setCompletionCode("COMPLETE");
-      model.addAttribute("turker_response", turkerResponse);
-      return turkerResponse.getPolicyResponse();
-    } else if (isMturkIDValid(turkerResponse.getMturkId())) {
-      Scenario scenario = getARandomScenario();
-      turkerResponse.setScenario(scenario);
-      model.addAttribute("turker_response", turkerResponse);
-      // TODO: imageUploader should eventually be part of turker_response
-      model.addAttribute("imageUploader", "B"); 
-      return "questionnaire";
+  public String showQuestionnaire(
+      @ModelAttribute("turker_response") @Valid TurkerResponse turkerResponse,
+      BindingResult result, ModelMap model) {
+    System.out.println("Here" + turkerResponse.getMturkId() + ", "
+        + turkerResponse.getCompletionCode() + ", " + turkerResponse.getPolicyResponse());
+    if (isMturkIDValid(turkerResponse.getMturkId())) {
+      if (turkerResponse.getCompletionCode() != null) {
+        turkerResponse.setResponseTime(new LocalDate());
+        /*if (result.hasErrors()) {
+          List<FieldError> errors = result.getFieldErrors();
+          for (FieldError error : errors) {
+            System.out.println(error.toString());
+          }*/
+        if (turkerResponse.getPolicyResponse() == null) {
+          FieldError policyResponseError = new FieldError("turkerResponse", "policyResponse",
+              messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
+          result.addError(policyResponseError);
+          model.addAttribute("turker_response", turkerResponse);
+          return "questionnaire";
+        } else {
+          turkerResponse.setCompletionCode("COMPLETE" + turkerResponse.getPolicyResponse());
+          model.addAttribute("turker_response", turkerResponse);
+          return "success" + turkerResponse.getCompletionCode(); // TODO: Add this page
+        }
+      } else {
+        Scenario scenario;
+        if (turkerResponse.getScenario() == null) {
+          scenario = getARandomScenario();
+        } else {
+          scenario = scenarioService.findById(turkerResponse.getScenario().getId());
+        }
+        turkerResponse.setScenario(scenario);
+        model.addAttribute("turker_response", turkerResponse);
+        // TODO: imageUploader should eventually be part of turker_response
+        model.addAttribute("imageUploader", "B");
+        return "questionnaire";
+      }
     } else {
-      return "signin_failure"; // TODO: Add this page
+      return "signin";
     }
   }
 
@@ -197,5 +220,13 @@ public class AppController {
     // so add 1 to make it inclusive
     int randomNum = rand.nextInt((max - min) + 1) + min;
     return randomNum;
+  }
+
+  @SuppressWarnings("unused")
+  private boolean isTurkerResponseValid(TurkerResponse turkerResponse) {
+    if (turkerResponse.getPolicyResponse() != null && !turkerResponse.getPolicyResponse().isEmpty()) {
+      return true;
+    }
+    return false;
   }
 }
