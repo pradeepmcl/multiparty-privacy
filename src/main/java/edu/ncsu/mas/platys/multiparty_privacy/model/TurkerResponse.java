@@ -2,12 +2,9 @@ package edu.ncsu.mas.platys.multiparty_privacy.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -36,9 +33,8 @@ public class TurkerResponse {
 
   // See my comment about lazy initialization in Scenario class
   @NotNull
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "scenario_id")
-  private Scenario scenario;
+  @Column(name = "scenario_id", nullable = false)
+  private int scenarioId;
 
   @NotBlank
   @Column(name = "policy_response", nullable = false)
@@ -72,12 +68,12 @@ public class TurkerResponse {
     this.responseTime = responseTime;
   }
 
-  public Scenario getScenario() {
-    return scenario;
+  public int getScenarioId() {
+    return scenarioId;
   }
 
-  public void setScenario(Scenario scenario) {
-    this.scenario = scenario;
+  public void setScenarioId(int scenarioId) {
+    this.scenarioId = scenarioId;
   }
 
   public String getPolicyResponse() {

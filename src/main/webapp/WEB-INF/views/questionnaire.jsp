@@ -75,30 +75,27 @@
 
   <div class="jumbotron lead">
    <h3>Picture</h3>
-   <p class="lead">${turker_response.scenario.image.description}</p>
+   <p class="lead">${scenario.image.description}</p>
    <p class="lead">A owns the camera in which the picture was
     taken...</p>
-   <img src="resources/images/${turker_response.scenario.image.name}"
+   <img src="resources/images/${scenario.image.name}"
     class="img-responsive center-block" alt="Responsive image">
 
   </div>
 
   <div class="jumbotron lead">
    <h3>Privacy Policies</h3>
-   <p>Now, ${imageUploader} decides to upload the picture to
-    Facebook. A, B, C argue about an appropriate privacy policy for the
-    picture. The following are their arguments...</p>
+   <p>A decides to upload the picture to Facebook. A, B, C argue
+    about an appropriate privacy policy for the picture. The following
+    are their arguments...</p>
 
    <ul class="list-group">
     <li class="list-group-item"><b>A: </b>
-     ${turker_response.scenario.policyA.description}.
-     ${turker_response.scenario.argumentA.description}</li>
+     ${scenario.policyA.description}. ${scenario.argumentA.description}</li>
     <li class="list-group-item"><b>B: </b>
-     ${turker_response.scenario.policyB.description}.
-     ${turker_response.scenario.argumentB.description}</li>
+     ${scenario.policyB.description}. ${scenario.argumentB.description}</li>
     <li class="list-group-item"><b>C: </b>
-     ${turker_response.scenario.policyC.description}.
-     ${turker_response.scenario.argumentC.description}</li>
+     ${scenario.policyC.description}. ${scenario.argumentC.description}</li>
    </ul>
   </div>
 
@@ -107,51 +104,48 @@
 
    <form:form method="POST" modelAttribute="turker_response">
     <form:input type="hidden" path="mturkId" id="mturkId" />
-    <form:input type="hidden" path="scenario.id" id="scenario.id" />
-    <form:input type="hidden" path="completionCode" id="started" /> <!-- TODO: remove -->
+    <form:input type="hidden" path="scenarioId" id="scenarioId" />
     <ol>
      <li>
       <h3>What privacy policy do you think should be applied to the
        picture?</h3>
       <div class="form-horizontal">
        <div class="radio">
-        <label>
-         <form:radiobutton path="policyResponse" value="policy_a" />
-         ${turker_response.scenario.policyA.description}
+        <label> <form:radiobutton path="policyResponse"
+          value="policy_a" /> ${scenario.policyA.description}
         </label>
        </div>
        <c:if
-        test="${turker_response.scenario.policyB.description != turker_response.scenario.policyA.description}">
+        test="${scenario.policyB.description != scenario.policyA.description}">
         <div class="radio">
-         <label>
-          <form:radiobutton path="policyResponse" value="policy_b" />
-          ${turker_response.scenario.policyB.description}
+         <label> <form:radiobutton path="policyResponse"
+           value="policy_b" /> ${scenario.policyB.description}
          </label>
         </div>
        </c:if>
        <c:if
-        test="${turker_response.scenario.policyC.description != turker_response.scenario.policyA.description && 
-						    turker_response.scenario.policyC.description != turker_response.scenario.policyB.description}">
+        test="${scenario.policyC.description != scenario.policyA.description && 
+						    scenario.policyC.description != scenario.policyB.description}">
         <div class="radio">
-        <label>
-         <form:radiobutton path="policyResponse" value="policy_b" />
-         ${turker_response.scenario.policyC.description}
+         <label> <form:radiobutton path="policyResponse"
+           value="policy_b" /> ${scenario.policyC.description}
          </label>
         </div>
        </c:if>
        <div class="form-group">
         <div class="col-sm-3 radio">
-         <label>
-          <form:radiobutton path="policyResponse" value="policy_other" />
-          Other policy:
-          </label>
+         <label> <form:radiobutton path="policyResponse"
+           value="policy_other" /> Other policy:
+         </label>
         </div>
         <div class="col-sm-9">
          <input type="text" class="form-control"
           placeholder="Enter the other policy">
         </div>
        </div>
-       <p><form:errors path="policyResponse" cssClass="error" /></p>
+       <div class="has-error">
+        <form:errors path="policyResponse" class="help-inline" />
+       </div>
       </div>
      </li>
 

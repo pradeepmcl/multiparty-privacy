@@ -152,45 +152,29 @@ public class AppController {
    * This method validates the signin ID amd loads the questionnaire page.
    */
   @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.POST)
-  public String showQuestionnaire(
-      @ModelAttribute("turker_response") @Valid TurkerResponse turkerResponse,
-      BindingResult result, ModelMap model) {
-    System.out.println("Here" + turkerResponse.getMturkId() + ", "
-        + turkerResponse.getCompletionCode() + ", " + turkerResponse.getPolicyResponse());
+  public String showQuestionnaire(@ModelAttribute("scenario") Scenario scenario,
+      @ModelAttribute("turker_response") TurkerResponse turkerResponse, BindingResult result,
+      ModelMap model) {
     if (isMturkIDValid(turkerResponse.getMturkId())) {
-      if (turkerResponse.getCompletionCode() != null) {
-        turkerResponse.setResponseTime(new LocalDate());
-        /*if (result.hasErrors()) {
-          List<FieldError> errors = result.getFieldErrors();
-          for (FieldError error : errors) {
-            System.out.println(error.toString());
-          }*/
-        if (turkerResponse.getPolicyResponse() == null) {
-          FieldError policyResponseError = new FieldError("turkerResponse", "policyResponse",
-              messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
-          result.addError(policyResponseError);
-          model.addAttribute("turker_response", turkerResponse);
-          return "questionnaire";
-        } else {
-          turkerResponse.setCompletionCode("COMPLETE" + turkerResponse.getPolicyResponse());
-          model.addAttribute("turker_response", turkerResponse);
-          return "success" + turkerResponse.getCompletionCode(); // TODO: Add this page
-        }
-      } else {
-        Scenario scenario;
-        if (turkerResponse.getScenario() == null) {
-          scenario = getARandomScenario();
-        } else {
-          scenario = scenarioService.findById(turkerResponse.getScenario().getId());
-        }
-        turkerResponse.setScenario(scenario);
-        model.addAttribute("turker_response", turkerResponse);
-        // TODO: imageUploader should eventually be part of turker_response
-        model.addAttribute("imageUploader", "B");
+      // The page is being loaded for the first time
+      if (turkerResponse.getScenarioId() == 0) { // 0 is the default value
+        scenario = getARandomScenario();
+        turkerResponse.setScenarioId(scenario.getId());
+        model.addAttribute("scenario", scenario);
         return "questionnaire";
+      } else { // The page was submitted
+        if (isTurkerResponseValid(turkerResponse, result, model)) {
+          turkerResponse.setResponseTime(new LocalDate());
+          turkerResponse.setCompletionCode("COMPLETE" + turkerResponse.getPolicyResponse());
+          return "success";
+        } else {
+          scenario = scenarioService.findById(turkerResponse.getScenarioId());
+          model.addAttribute("scenario", scenario);
+          return "questionnaire";
+        }
       }
     } else {
-      return "signin";
+      return "signin_failure"; // TODO: This page does not exist
     }
   }
 
@@ -222,11 +206,23 @@ public class AppController {
     return randomNum;
   }
 
-  @SuppressWarnings("unused")
-  private boolean isTurkerResponseValid(TurkerResponse turkerResponse) {
-    if (turkerResponse.getPolicyResponse() != null && !turkerResponse.getPolicyResponse().isEmpty()) {
-      return true;
+  /*
+   * if (result.hasErrors()) {
+   * List<FieldError> errors = result.getFieldErrors();
+   * for (FieldError error : errors) {
+   * System.out.println(error.toString());
+   * }
+   */
+  
+  private boolean isTurkerResponseValid(TurkerResponse turkerResponse, BindingResult result,
+      ModelMap model) {
+    if (turkerResponse.getPolicyResponse() == null) {
+      FieldError policyResponseError = new FieldError("turkerResponse", "policyResponse",
+          messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
+      result.addError(policyResponseError);
+      model.addAttribute("turker_response", turkerResponse);
+      return false;
     }
-    return false;
+    return true;
   }
 }
