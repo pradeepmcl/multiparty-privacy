@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -26,10 +26,10 @@ public class TurkerResponse {
   private String mturkId;
 
   @NotNull
-  @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+  @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
   @Column(name = "response_time", nullable = false)
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-  private LocalDate responseTime;
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+  private LocalDateTime responseTime;
 
   // See my comment about lazy initialization in Scenario class
   @NotNull
@@ -67,11 +67,11 @@ public class TurkerResponse {
     this.mturkId = mturkId;
   }
 
-  public LocalDate getResponseTime() {
+  public LocalDateTime getResponseTime() {
     return responseTime;
   }
 
-  public void setResponseTime(LocalDate responseTime) {
+  public void setResponseTime(LocalDateTime responseTime) {
     this.responseTime = responseTime;
   }
 

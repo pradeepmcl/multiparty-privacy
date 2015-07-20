@@ -6,7 +6,7 @@ import java.util.Random;
 
 import javax.validation.Valid;
 
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -23,6 +23,8 @@ import edu.ncsu.mas.platys.multiparty_privacy.model.Scenario;
 import edu.ncsu.mas.platys.multiparty_privacy.model.TurkerResponse;
 import edu.ncsu.mas.platys.multiparty_privacy.service.EmployeeService;
 import edu.ncsu.mas.platys.multiparty_privacy.service.ScenarioService;
+import edu.ncsu.mas.platys.multiparty_privacy.service.TurkerResponseService;
+import edu.ncsu.mas.platys.multiparty_privacy.util.RandomCodeGenerator;
 
 @Controller
 @RequestMapping("/")
@@ -33,11 +35,16 @@ public class AppController {
 
   @Autowired
   ScenarioService scenarioService;
+  
+  @Autowired
+  TurkerResponseService turkerResponseService;
 
   @Autowired
   MessageSource messageSource;
 
   Random rand = new Random();
+  
+  RandomCodeGenerator randCodeGen = new RandomCodeGenerator(8);
 
   /*
    * This method will list all existing employees.
@@ -149,7 +156,7 @@ public class AppController {
   }
 
   /*
-   * This method validates the signin ID amd loads the questionnaire page.
+   * This method validates the signin ID and loads the questionnaire page.
    */
   @RequestMapping(value = { "/questionnaire" }, method = RequestMethod.POST)
   public String showQuestionnaire(@ModelAttribute("scenario") Scenario scenario,
@@ -164,10 +171,15 @@ public class AppController {
         return "questionnaire";
       } else { // The page was submitted
         if (isTurkerResponseValid(turkerResponse, result, model)) {
-          turkerResponse.setResponseTime(new LocalDate());
-          turkerResponse.setCompletionCode("COMPLETE" + turkerResponse.getPolicy());
+          turkerResponse.setResponseTime(LocalDateTime.now());
+          turkerResponse.setCompletionCode(randCodeGen.nextString());
+          
+          turkerResponseService.saveResponse(turkerResponse);
+
+          model.addAttribute("mturkId", turkerResponse.getMturkId());
+          model.addAttribute("completionCode", turkerResponse.getCompletionCode());
           return "success";
-        } else {
+        } else { // Invalid response, go back
           scenario = scenarioService.findById(turkerResponse.getScenarioId());
           model.addAttribute("scenario", scenario);
           return "questionnaire";
@@ -219,8 +231,6 @@ public class AppController {
       ModelMap model) {
     boolean isValid = true;
     
-    System.out.println("Policy: " + turkerResponse.getPolicy());
-    System.out.println("PolicyOther: " + turkerResponse.getPolicyOther());
     if (turkerResponse.getPolicy() == null) {
       FieldError error = new FieldError("turkerResponse", "policy", messageSource.getMessage(
           "mandatory.answer", null, Locale.getDefault()));
@@ -235,7 +245,6 @@ public class AppController {
       isValid = false;
     }
     
-    System.out.println("Justification: " + turkerResponse.getPolicyJustification());
     if (turkerResponse.getPolicyJustification() == null
         || turkerResponse.getPolicyJustification().isEmpty()) {
       FieldError error = new FieldError("turkerResponse", "policyJustification",
