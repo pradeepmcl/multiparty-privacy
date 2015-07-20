@@ -52,7 +52,9 @@ CREATE TABLE turker_response (
   mturk_id VARCHAR(20) NOT NULL,
   response_time DATETIME NOT NULL,
   scenario_id INT NOT NULL,
-  policy_response VARCHAR(200) NOT NULL,
+  policy VARCHAR(200) NOT NULL,
+  policy_other VARCHAR(500),
+  policy_justification VARCHAR(2000) NOT NULL,
   completion_code VARCHAR(20) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (scenario_id) REFERENCES scenario(id)

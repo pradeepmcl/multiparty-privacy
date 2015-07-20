@@ -37,8 +37,15 @@ public class TurkerResponse {
   private int scenarioId;
 
   @NotBlank
-  @Column(name = "policy_response", nullable = false)
-  private String policyResponse;
+  @Column(name = "policy", nullable = false)
+  private String policy;
+  
+  @Column(name = "policy_other")
+  private String policyOther;
+    
+  @NotBlank
+  @Column(name = "policy_justification", nullable = false)
+  private String policyJustification;
 
   @NotNull
   @Column(name = "completion_code", nullable = false)
@@ -76,12 +83,28 @@ public class TurkerResponse {
     this.scenarioId = scenarioId;
   }
 
-  public String getPolicyResponse() {
-    return policyResponse;
+  public String getPolicy() {
+    return policy;
   }
 
-  public void setPolicyResponse(String policyResponse) {
-    this.policyResponse = policyResponse;
+  public void setPolicy(String policy) {
+    this.policy = policy;
+  }
+
+  public String getPolicyOther() {
+    return policyOther;
+  }
+
+  public void setPolicyOther(String policyOther) {
+    this.policyOther = policyOther;
+  }
+
+  public String getPolicyJustification() {
+    return policyJustification;
+  }
+
+  public void setPolicyJustification(String policyJustification) {
+    this.policyJustification = policyJustification;
   }
 
   public String getCompletionCode() {

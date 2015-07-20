@@ -165,7 +165,7 @@ public class AppController {
       } else { // The page was submitted
         if (isTurkerResponseValid(turkerResponse, result, model)) {
           turkerResponse.setResponseTime(new LocalDate());
-          turkerResponse.setCompletionCode("COMPLETE" + turkerResponse.getPolicyResponse());
+          turkerResponse.setCompletionCode("COMPLETE" + turkerResponse.getPolicy());
           return "success";
         } else {
           scenario = scenarioService.findById(turkerResponse.getScenarioId());
@@ -214,15 +214,37 @@ public class AppController {
    * }
    */
   
+  // TODO: I am not sure if this is the standard way of validating
   private boolean isTurkerResponseValid(TurkerResponse turkerResponse, BindingResult result,
       ModelMap model) {
-    if (turkerResponse.getPolicyResponse() == null) {
-      FieldError policyResponseError = new FieldError("turkerResponse", "policyResponse",
-          messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
-      result.addError(policyResponseError);
-      model.addAttribute("turker_response", turkerResponse);
-      return false;
+    boolean isValid = true;
+    
+    System.out.println("Policy: " + turkerResponse.getPolicy());
+    System.out.println("PolicyOther: " + turkerResponse.getPolicyOther());
+    if (turkerResponse.getPolicy() == null) {
+      FieldError error = new FieldError("turkerResponse", "policy", messageSource.getMessage(
+          "mandatory.answer", null, Locale.getDefault()));
+      result.addError(error);
+      isValid = false;
+    } else if (turkerResponse.getPolicy().equals("other")
+        && (turkerResponse.getPolicyOther() == null || turkerResponse.getPolicyOther().isEmpty())) {
+      FieldError error = new FieldError("turkerResponse", "policyOther", messageSource.getMessage(
+          "mandatory.if.answer", new String[] { "other policy", "in the text box next to it" },
+          Locale.getDefault()));
+      result.addError(error);
+      isValid = false;
     }
-    return true;
+    
+    System.out.println("Justification: " + turkerResponse.getPolicyJustification());
+    if (turkerResponse.getPolicyJustification() == null
+        || turkerResponse.getPolicyJustification().isEmpty()) {
+      FieldError error = new FieldError("turkerResponse", "policyJustification",
+          messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
+      result.addError(error);
+      isValid = false;
+    }
+    
+    model.addAttribute("turker_response", turkerResponse);
+    return isValid;
   }
 }

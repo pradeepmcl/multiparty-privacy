@@ -111,15 +111,15 @@
        picture?</h3>
       <div class="form-horizontal">
        <div class="radio">
-        <label> <form:radiobutton path="policyResponse"
-          value="policy_a" /> ${scenario.policyA.description}
+        <label> <form:radiobutton path="policy"
+          value="a" /> ${scenario.policyA.description}
         </label>
        </div>
        <c:if
         test="${scenario.policyB.description != scenario.policyA.description}">
         <div class="radio">
-         <label> <form:radiobutton path="policyResponse"
-           value="policy_b" /> ${scenario.policyB.description}
+         <label> <form:radiobutton path="policy"
+           value="b" /> ${scenario.policyB.description}
          </label>
         </div>
        </c:if>
@@ -127,37 +127,40 @@
         test="${scenario.policyC.description != scenario.policyA.description && 
 						    scenario.policyC.description != scenario.policyB.description}">
         <div class="radio">
-         <label> <form:radiobutton path="policyResponse"
-           value="policy_b" /> ${scenario.policyC.description}
+         <label> <form:radiobutton path="policy"
+           value="c" /> ${scenario.policyC.description}
          </label>
         </div>
        </c:if>
        <div class="form-group">
         <div class="col-sm-3 radio">
-         <label> <form:radiobutton path="policyResponse"
-           value="policy_other" /> Other policy:
+         <label> <form:radiobutton path="policy"
+           value="other" /> Other policy:
          </label>
         </div>
         <div class="col-sm-9">
-         <input type="text" class="form-control"
-          placeholder="Enter the other policy">
+         <form:input type="text" path="policyOther" class="form-control"
+          placeholder="Enter the other policy" />
         </div>
        </div>
        <div class="has-error">
-        <form:errors path="policyResponse" class="help-inline" />
+        <form:errors path="policy" class="help-inline" />
+        <form:errors path="policyOther" class="help-inline" />
        </div>
       </div>
      </li>
 
      <li>
-      <h3>Why did you choose the above policy?</h3> <textarea
-       class="form-control" rows="3"
-       placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context"></textarea>
+      <h3>Why did you choose the above policy?</h3> 
+      <form:textarea path="policyJustification" class="form-control" rows="3"
+       placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
+       <div class="has-error">
+        <form:errors path="policyJustification" class="help-inline" />
+       </div>
      </li>
     </ol>
     <div class="text-center">
-     <input type="submit" class="btn btn-primary btn-lg"
-      value="Submit Responses" />
+     <button type="submit" class="btn btn-primary btn-lg">Submit Responses</button>
     </div>
    </form:form>
   </div>
