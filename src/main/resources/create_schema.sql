@@ -1,6 +1,7 @@
 CREATE TABLE image (
   id INT NOT NULL auto_increment, 
   name VARCHAR(50) NOT NULL,
+  people VARCHAR(100) NOT NULL,
   description VARCHAR(2048) NOT NULL,
   PRIMARY KEY (id)
 );
