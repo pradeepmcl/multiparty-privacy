@@ -15,8 +15,17 @@ public class Image {
   @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name = "description", nullable = false)
-  private String description;
+  @Column(name = "people", nullable = false)
+  private String people;
+
+  @Column(name = "image_description", nullable = false)
+  private String imageDescription;
+  
+  @Column(name = "sharer", nullable = false)
+  private String sharer;
+  
+  @Column(name = "policy_preamble", nullable = false)
+  private String policyPreamble;
 
   public int getId() {
     return id;
@@ -34,12 +43,36 @@ public class Image {
     this.name = name;
   }
 
-  public String getDescription() {
-    return description;
+  public String getImageDescription() {
+    return imageDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setImageDescription(String description) {
+    this.imageDescription = description;
+  }
+
+  public String getPeople() {
+    return people;
+  }
+
+  public void setPeople(String people) {
+    this.people = people;
+  }
+
+  public String getSharer() {
+    return sharer;
+  }
+
+  public void setSharer(String sharer) {
+    this.sharer = sharer;
+  }
+
+  public String getPolicyPreamble() {
+    return policyPreamble;
+  }
+
+  public void setPolicyPreamble(String policyPreamble) {
+    this.policyPreamble = policyPreamble;
   }
 
   @Override
@@ -66,6 +99,6 @@ public class Image {
 
   @Override
   public String toString() {
-    return "Image [id=" + id + ", name=" + name + ", description=" + description + "]";
+    return "Image [id=" + id + ", name=" + name + ", description=" + imageDescription + "]";
   }
 }

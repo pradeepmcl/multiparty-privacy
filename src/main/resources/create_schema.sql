@@ -2,9 +2,9 @@ CREATE TABLE image (
   id INT NOT NULL auto_increment, 
   name VARCHAR(50) NOT NULL,
   people VARCHAR(100) NOT NULL,
-  photo_description VARCHAR(1024) NOT NULL,
+  image_description VARCHAR(1024) NOT NULL,
   sharer VARCHAR(50) NOT NULL,
-  policy_description VARCHAR(1024) NOT NULL,
+  policy_preamble VARCHAR(1024) NOT NULL,
   PRIMARY KEY (id)
 );
 

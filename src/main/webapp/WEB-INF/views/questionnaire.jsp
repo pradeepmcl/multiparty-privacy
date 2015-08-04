@@ -16,21 +16,8 @@
 
 <title>Multiparty Privacy Study</title>
 
-<!-- Bootstrap core CSS -->
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Custom styles for this template -->
 <link href="resources/css/navbar.css" rel="stylesheet">
-
-<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-<!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
-
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
 </head>
 
@@ -64,30 +51,22 @@
    <!--/.container-fluid -->
   </nav>
 
-
-
-  <!-- Main component for a primary marketing message or call to action -->
   <div class="jumbotron lead">
    <h3>Task</h3>
    <p>Read the picture and its description below and answer the
-    following questionnaire...</p>
+    following questionnaire.</p>
   </div>
 
   <div class="jumbotron lead">
    <h3>Picture</h3>
-   <p class="lead">${scenario.image.description}</p>
-   <p class="lead">A owns the camera in which the picture was
-    taken...</p>
+   <p>${scenario.image.imageDescription}</p>
    <img src="resources/images/${scenario.image.name}"
     class="img-responsive center-block" alt="Responsive image">
-
   </div>
 
   <div class="jumbotron lead">
-   <h3>Privacy Policies</h3>
-   <p>A decides to upload the picture to Facebook. A, B, C argue
-    about an appropriate privacy policy for the picture. The following
-    are their arguments...</p>
+   <h3>Picture sharing</h3>
+   <p>${scenario.image.policyPreamble}</p>
 
    <ul class="list-group">
     <li class="list-group-item"><b>A: </b>
@@ -107,8 +86,8 @@
     <form:input type="hidden" path="scenarioId" id="scenarioId" />
     <ol>
      <li>
-      <h3>What privacy policy do you think should be applied to the
-       picture?</h3>
+      <h3>What privacy policy do you think should
+       ${scenario.image.sharer} apply to the photograph?</h3>
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="policy"
