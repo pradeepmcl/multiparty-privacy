@@ -4,7 +4,7 @@ CREATE TABLE image (
   people VARCHAR(100) NOT NULL,
   image_description VARCHAR(1024) NOT NULL,
   sharer VARCHAR(50) NOT NULL,
-  policy_preamble VARCHAR(1024) NOT NULL,
+  sharing_description VARCHAR(1024) NOT NULL,
   PRIMARY KEY (id)
 );
 

@@ -62,12 +62,12 @@
    <p>${scenario.image.imageDescription}</p>
    <img src="resources/images/${scenario.image.name}"
     class="img-responsive center-block" alt="Responsive image">
+    <br>
+    <p>${scenario.image.sharingDescription}</p>
   </div>
 
-  <div class="jumbotron lead">
+  <!-- <div class="jumbotron lead">
    <h3>Picture sharing</h3>
-   <p>${scenario.image.policyPreamble}</p>
-
    <ul class="list-group">
     <li class="list-group-item"><b>A: </b>
      ${scenario.policyA.description}. ${scenario.argumentA.description}</li>
@@ -76,7 +76,7 @@
     <li class="list-group-item"><b>C: </b>
      ${scenario.policyC.description}. ${scenario.argumentC.description}</li>
    </ul>
-  </div>
+  </div> -->
 
   <div class="jumbotron lead">
    <h3>Questionnaire</h3>
@@ -86,8 +86,8 @@
     <form:input type="hidden" path="scenarioId" id="scenarioId" />
     <ol>
      <li>
-      <h3>What privacy policy do you think should
-       ${scenario.image.sharer} apply to the photograph?</h3>
+      <h3>What privacy policy do you think ${scenario.image.sharer}
+       should apply to the photograph?</h3>
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="policy"

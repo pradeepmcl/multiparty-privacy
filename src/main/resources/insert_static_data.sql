@@ -1,4 +1,4 @@
-insert into image(name, people, image_description, sharer, policy_preamble) values 
+insert into image(name, people, image_description, sharer, sharing_description) values 
   ('family-lowSens.png', 'Frank,Christopher,Dan', 'Moore brothers and their parents, wives and children took part in a photoshoot. The following is the best photo from the photoshoot.', 'Frank', 'Frank wants to upload the photo above to his social media account.'),
   ('family-medSens.png', 'Aaina\'s father,Aaina\'s mother,Aaina\'s grandfather', 'Aaina\'s father took the photo below during her birthday, showing Aiana and her mother, grandfather, nieces, and nephews.', 'Aaina\'s father', 'Few days after the photo was taken, Aaina\'s father wants to share this photo on social media.'),
   ('family-medSens.png', 'Mary,Sophia,Charles', 'Mary, Sophia, and Charles attend their mother\'s funeral. Another family member takes some photos and circulates them among the family members.', 'Mary', 'Mary wants to share the above photo on social media.'),

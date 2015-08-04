@@ -24,8 +24,8 @@ public class Image {
   @Column(name = "sharer", nullable = false)
   private String sharer;
   
-  @Column(name = "policy_preamble", nullable = false)
-  private String policyPreamble;
+  @Column(name = "sharing_description", nullable = false)
+  private String sharingDescription;
 
   public int getId() {
     return id;
@@ -67,12 +67,12 @@ public class Image {
     this.sharer = sharer;
   }
 
-  public String getPolicyPreamble() {
-    return policyPreamble;
+  public String getSharingDescription() {
+    return sharingDescription;
   }
 
-  public void setPolicyPreamble(String policyPreamble) {
-    this.policyPreamble = policyPreamble;
+  public void setSharingDescription(String sharingDescription) {
+    this.sharingDescription = sharingDescription;
   }
 
   @Override
