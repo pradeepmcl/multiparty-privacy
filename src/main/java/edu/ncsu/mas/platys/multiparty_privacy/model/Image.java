@@ -15,8 +15,8 @@ public class Image {
   @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name = "people", nullable = false)
-  private String people;
+  @Column(name = "stakeholders", nullable = false)
+  private String stakeholders;
 
   @Column(name = "image_description", nullable = false)
   private String imageDescription;
@@ -51,12 +51,12 @@ public class Image {
     this.imageDescription = description;
   }
 
-  public String getPeople() {
-    return people;
+  public String getStakeholders() {
+    return stakeholders;
   }
 
-  public void setPeople(String people) {
-    this.people = people;
+  public void setStakeholders(String stakeholders) {
+    this.stakeholders = stakeholders;
   }
 
   public String getSharer() {

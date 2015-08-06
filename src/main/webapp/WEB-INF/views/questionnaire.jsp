@@ -2,6 +2,7 @@
  pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,102 +52,232 @@
    <!--/.container-fluid -->
   </nav>
 
+  <h3>Task</h3>
   <div class="jumbotron lead">
-   <h3>Task</h3>
-   <p>Read the picture and its description below and answer the
-    following questionnaire.</p>
+   <p>Read the picture and its description below and answer three
+    questionnaires that follow. Please answer the questionnaires sequentially.</p>
   </div>
 
+  <h3>Picture and description</h3>
   <div class="jumbotron lead">
-   <h3>Picture</h3>
    <p>${scenario.image.imageDescription}</p>
    <img src="resources/images/${scenario.image.name}"
     class="img-responsive center-block" alt="Responsive image">
-    <br>
-    <p>${scenario.image.sharingDescription}</p>
   </div>
+  
+  <c:set var="stakeholders" value="${fn:split(scenario.image.stakeholders,',')}"/>
+  
+  <form:form method="POST" modelAttribute="turker_response">
+   <form:input type="hidden" path="mturkId" id="mturkId" />
+   <form:input type="hidden" path="scenarioId" id="scenarioId" />
+   
+   <h3>Questions about the picture</h3>
+   <div class="jumbotron lead">
+    <p>Read the picture and its description carefully to answer the following questions.</p>
+    <ol>
+     <li>
+      <h3>How sensitive is the picture?</h3>
+       <label class="radio-inline"> 
+        <form:radiobutton path="imageSensitivity" value="sensitive" />
+        Not sensitive
+       </label> 
+       <label class="radio-inline"> 
+        <form:radiobutton path="imageSensitivity" value="somewhat_sensitive" /> 
+        Somewhat sensitive
+       </label> 
+       <label class="radio-inline">
+        <form:radiobutton path="imageSensitivity" value="not_sensitive" />
+        Sensitive
+       </label>
+     </li>
+     
+     <li>
+      <h3>What is the sentiment of the people in the picture?</h3>
+       <label class="radio-inline"> 
+        <form:radiobutton path="imageSentiment" value="positive" />
+        Positive
+       </label> 
+       <label class="radio-inline"> 
+        <form:radiobutton path="imageSentiment" value="neutral" /> 
+        Neutral
+       </label> 
+       <label class="radio-inline">
+        <form:radiobutton path="imageSentiment" value="negative" />
+        Negative
+       </label>
+     </li>
+     
+     <li>
+      <h3>What is the relationship between ${stakeholders[0]},
+       ${stakeholders[1]}, and ${stakeholders[2]}?</h3>
+       <label class="radio-inline"> 
+        <form:radiobutton path="imageRelationship" value="family" />
+        Family
+       </label> 
+       <label class="radio-inline"> 
+        <form:radiobutton path="imageRelationship" value="friends" /> 
+        Friends
+       </label> 
+       <label class="radio-inline">
+        <form:radiobutton path="imageRelationship" value="colleagues" />
+        Colleagues
+       </label>
+     </li>
 
-  <!-- <div class="jumbotron lead">
-   <h3>Picture sharing</h3>
-   <ul class="list-group">
-    <li class="list-group-item"><b>A: </b>
-     ${scenario.policyA.description}. ${scenario.argumentA.description}</li>
-    <li class="list-group-item"><b>B: </b>
-     ${scenario.policyB.description}. ${scenario.argumentB.description}</li>
-    <li class="list-group-item"><b>C: </b>
-     ${scenario.policyC.description}. ${scenario.argumentC.description}</li>
-   </ul>
-  </div> -->
-
-  <div class="jumbotron lead">
-   <h3>Questionnaire</h3>
-
-   <form:form method="POST" modelAttribute="turker_response">
-    <form:input type="hidden" path="mturkId" id="mturkId" />
-    <form:input type="hidden" path="scenarioId" id="scenarioId" />
+     <li>
+      <h3>How many people are in the picture?</h3> 
+       <label class="radio-inline"> 
+        <form:radiobutton path="imagePeopleCount" value="three" />
+        Three
+       </label> 
+       <label class="radio-inline"> 
+        <form:radiobutton path="imagePeopleCount" value="five" /> 
+        Five
+       </label> 
+       <label class="radio-inline">
+        <form:radiobutton path="imagePeopleCount" value="ten_plus" />
+        Ten or more
+       </label>
+     </li>
+    </ol>
+    <div class="has-error">
+     <form:errors path="imagePeopleCount" class="help-inline" />
+    </div>
+   </div>
+   
+   <h3>Questions about sharing scenario 1</h3>
+   <div class="jumbotron lead">
+    <p>Imagine that ${scenario.image.sharingDescription}</p>
     <ol>
      <li>
       <h3>What privacy policy do you think ${scenario.image.sharer}
-       should apply to the photograph?</h3>
+       should apply to the picture?</h3>
       <div class="form-horizontal">
        <div class="radio">
-        <label> <form:radiobutton path="policy"
-          value="a" /> ${scenario.policyA.description}
+        <label> <form:radiobutton path="case1Policy" value="a" />
+         Share with all
         </label>
        </div>
-       <c:if
-        test="${scenario.policyB.description != scenario.policyA.description}">
-        <div class="radio">
-         <label> <form:radiobutton path="policy"
-           value="b" /> ${scenario.policyB.description}
-         </label>
-        </div>
-       </c:if>
-       <c:if
-        test="${scenario.policyC.description != scenario.policyA.description && 
-						    scenario.policyC.description != scenario.policyB.description}">
-        <div class="radio">
-         <label> <form:radiobutton path="policy"
-           value="c" /> ${scenario.policyC.description}
-         </label>
-        </div>
-       </c:if>
+       <div class="radio">
+        <label> <form:radiobutton path="case1Policy" value="b" />
+         Share with common friends of ${stakeholders[0]},
+         ${stakeholders[1]}, and ${stakeholders[2]}
+        </label>
+       </div>
+       <div class="radio">
+        <label> <form:radiobutton path="case1Policy" value="c" /> 
+         Do not share with others
+        </label>
+       </div>
        <div class="form-group">
         <div class="col-sm-3 radio">
-         <label> <form:radiobutton path="policy"
-           value="other" /> Other policy:
+         <label> <form:radiobutton path="case1Policy" value="other" />
+          Other policy:
          </label>
         </div>
         <div class="col-sm-9">
-         <form:input type="text" path="policyOther" class="form-control"
+         <form:input type="text" path="case1PolicyOther" class="form-control"
           placeholder="Enter the other policy" />
         </div>
        </div>
        <div class="has-error">
-        <form:errors path="policy" class="help-inline" />
-        <form:errors path="policyOther" class="help-inline" />
+        <form:errors path="case1Policy" class="help-inline" />
+        <form:errors path="case1PolicyOther" class="help-inline" />
        </div>
       </div>
      </li>
 
      <li>
-      <h3>Why did you choose the above policy?</h3> 
-      <form:textarea path="policyJustification" class="form-control" rows="3"
+      <h3>Why did you choose the above policy?</h3> <form:textarea
+       path="case1PolicyJustification" class="form-control" rows="3"
        placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
-       <div class="has-error">
-        <form:errors path="policyJustification" class="help-inline" />
-       </div>
+      <div class="has-error">
+       <form:errors path="case1PolicyJustification" class="help-inline" />
+      </div>
      </li>
     </ol>
-    <div class="text-center">
-     <button type="submit" class="btn btn-primary btn-lg">Submit Responses</button>
-    </div>
-   </form:form>
-  </div>
+   </div>
+      
+   <h3>Questions about sharing scenario 2</h3>
+   <div class="jumbotron lead">
+    <p>Imagine that ${scenario.image.sharingDescription} Now, unlike
+     the scenario above, ${stakeholders[0]}, ${stakeholders[1]}, and
+     ${stakeholders[2]} discuss an appropriate privacy policy for the
+     picture. The following are their views.</p>
+    <ul class="list-group">
+     <li class="list-group-item"><b>${stakeholders[0]}: </b>
+      ${scenario.policyA.description}. ${scenario.argumentA.description}</li>
+     <li class="list-group-item"><b>${stakeholders[1]}: </b>
+      ${scenario.policyB.description}. ${scenario.argumentB.description}</li>
+     <li class="list-group-item"><b>${stakeholders[2]}: </b>
+      ${scenario.policyC.description}. ${scenario.argumentC.description}</li>
+    </ul>
+     
+    <ol>
+     <li>
+      <h3>What privacy policy do you think ${scenario.image.sharer}
+       should apply to the picture?</h3>
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="case2Policy" value="a" />
+         ${scenario.policyA.description}
+        </label>
+       </div>
+       <c:if
+        test="${scenario.policyB.description != scenario.policyA.description}">
+        <div class="radio">
+         <label> <form:radiobutton path="case2Policy" value="b" />
+          ${scenario.policyB.description}
+         </label>
+        </div>
+       </c:if>
+       <c:if
+        test="${scenario.policyC.description != scenario.policyA.description && 
+                scenario.policyC.description != scenario.policyB.description}">
+        <div class="radio">
+         <label> <form:radiobutton path="case2Policy" value="c" />
+          ${scenario.policyC.description}
+         </label>
+        </div>
+       </c:if>
+       <div class="form-group">
+        <div class="col-sm-3 radio">
+         <label> <form:radiobutton path="case2Policy" value="other" />
+          Other policy:
+         </label>
+        </div>
+        <div class="col-sm-9">
+         <form:input type="text" path="case2PolicyOther" class="form-control"
+          placeholder="Enter the other policy" />
+        </div>
+       </div>
+       <div class="has-error">
+        <form:errors path="case2Policy" class="help-inline" />
+        <form:errors path="case2PolicyOther" class="help-inline" />
+       </div>
+      </div>
+     </li>
+
+     <li>
+      <h3>Why did you choose the above policy?</h3> <form:textarea
+       path="case2PolicyJustification" class="form-control" rows="3"
+       placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
+      <div class="has-error">
+       <form:errors path="case2PolicyJustification" class="help-inline" />
+      </div>
+     </li>
+    </ol>
+   </div>
+   
+   <div class="text-center">
+    <button type="submit" class="btn btn-primary btn-lg">Submit
+     Responses</button>
+   </div>
+   
+  </form:form>
 
  </div>
  <!-- /container -->
-
 
  <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -154,7 +285,5 @@
  <script
   src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
  <script src="resources/js/bootstrap.min.js"></script>
- <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
- <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
 </body>
 </html>

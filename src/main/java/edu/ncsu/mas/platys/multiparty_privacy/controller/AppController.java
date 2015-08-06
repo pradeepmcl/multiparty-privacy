@@ -122,30 +122,54 @@ public class AppController {
   private boolean isTurkerResponseValid(TurkerResponse turkerResponse, BindingResult result,
       ModelMap model) {
     boolean isValid = true;
-    
-    if (turkerResponse.getPolicy() == null) {
-      FieldError error = new FieldError("turkerResponse", "policy", messageSource.getMessage(
-          "mandatory.answer", null, Locale.getDefault()));
-      result.addError(error);
-      isValid = false;
-    } else if (turkerResponse.getPolicy().equals("other")
-        && (turkerResponse.getPolicyOther() == null || turkerResponse.getPolicyOther().isEmpty())) {
-      FieldError error = new FieldError("turkerResponse", "policyOther", messageSource.getMessage(
-          "mandatory.if.answer", new String[] { "other policy", "in the text box next to it" },
-          Locale.getDefault()));
+
+    isValid = validateTurkerResponseForImageQuestions(turkerResponse, result, isValid);
+    isValid = validateTurkerResponseForCase(turkerResponse, result, "case1", isValid);
+    isValid = validateTurkerResponseForCase(turkerResponse, result, "case2", isValid);
+
+    model.addAttribute("turker_response", turkerResponse);
+
+    return isValid;
+  }
+
+  private boolean validateTurkerResponseForImageQuestions(TurkerResponse turkerResponse,
+      BindingResult result, boolean isValid) {
+    if (turkerResponse.getImageSensitivity() == null || turkerResponse.getImageSentiment() == null
+        || turkerResponse.getImageRelationship() == null
+        || turkerResponse.getImagePeopleCount() == null) {
+      FieldError error = new FieldError("turkerResponse", "imagePeopleCount",
+          messageSource.getMessage("mandatory.answers", new String[] { "above" },
+              Locale.getDefault()));
       result.addError(error);
       isValid = false;
     }
-    
-    if (turkerResponse.getPolicyJustification() == null
-        || turkerResponse.getPolicyJustification().isEmpty()) {
-      FieldError error = new FieldError("turkerResponse", "policyJustification",
+    return isValid;
+  }
+
+  private boolean validateTurkerResponseForCase(TurkerResponse turkerResponse,
+      BindingResult result, String _case, boolean isValid) {
+    if (turkerResponse.getPolicy(_case) == null) {
+      FieldError error = new FieldError("turkerResponse", _case + "Policy",
+          messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
+      result.addError(error);
+      isValid = false;
+    } else if (turkerResponse.getPolicy(_case).equals("other")
+        && (turkerResponse.getPolicyOther(_case) == null || turkerResponse.getPolicyOther(_case)
+            .isEmpty())) {
+      FieldError error = new FieldError("turkerResponse", _case + "PolicyOther",
+          messageSource.getMessage("mandatory.if.answer", new String[] { "other policy",
+              "in the text box next to it" }, Locale.getDefault()));
+      result.addError(error);
+      isValid = false;
+    }
+
+    if (turkerResponse.getPolicyJustification(_case) == null
+        || turkerResponse.getPolicyJustification(_case).isEmpty()) {
+      FieldError error = new FieldError("turkerResponse", _case + "PolicyJustification",
           messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
       result.addError(error);
       isValid = false;
     }
-    
-    model.addAttribute("turker_response", turkerResponse);
     return isValid;
   }
 }
