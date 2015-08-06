@@ -22,6 +22,16 @@ CREATE TABLE argument (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE spotcheck_question (
+  id INT NOT NULL auto_increment,
+  name VARCHAR(200) NOT NULL,
+  question VARCHAR(1024) NOT NULL,
+  options VARCHAR(1024) NOT NULL,
+  options_type VARCHAR(20) NOT NULL,
+  answer VARCHAR(256) NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE scenario (
   id INT NOT NULL auto_increment,
   image_id INT NOT NULL,
