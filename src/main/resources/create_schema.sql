@@ -17,9 +17,11 @@ CREATE TABLE policy (
 
 CREATE TABLE argument (
   id INT NOT NULL auto_increment,
+  image_id INT NOT NULL,
   name VARCHAR(200) NOT NULL,
   description VARCHAR(1024) NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (image_id) REFERENCES image(id)
 );
 
 CREATE TABLE spotcheck_question (
@@ -35,11 +37,11 @@ CREATE TABLE spotcheck_question (
 CREATE TABLE scenario (
   id INT NOT NULL auto_increment,
   image_id INT NOT NULL,
-  policy_a_id INT NOT NULL,
+  policy_a_id INT,
   argument_a_id INT NOT NULL,
-  policy_b_id INT NOT NULL,
+  policy_b_id INT,
   argument_b_id INT NOT NULL,
-  policy_c_id INT NOT NULL,
+  policy_c_id INT,
   argument_c_id INT NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (image_id) REFERENCES image(id),

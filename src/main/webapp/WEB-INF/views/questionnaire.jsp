@@ -206,11 +206,33 @@
      picture. The following are their views.</p>
     <ul class="list-group">
      <li class="list-group-item"><b>${stakeholders[0]}: </b>
-      ${scenario.policyA.description}. ${scenario.argumentA.description}</li>
-     <li class="list-group-item"><b>${stakeholders[1]}: </b>
-      ${scenario.policyB.description}. ${scenario.argumentB.description}</li>
-     <li class="list-group-item"><b>${stakeholders[2]}: </b>
-      ${scenario.policyC.description}. ${scenario.argumentC.description}</li>
+      ${scenario.argumentA.description}</li>
+      
+     <c:choose>
+      <c:when test="${scenario.argumentB.description == scenario.argumentA.description}">     
+       <li class="list-group-item"><b>${stakeholders[1]}: </b>
+        I agree with ${stakeholders[0]}.</li>
+      </c:when>
+      <c:otherwise>
+       <li class="list-group-item"><b>${stakeholders[1]}: </b>
+        ${scenario.argumentB.description}</li>       
+      </c:otherwise>
+     </c:choose>
+
+     <c:choose>
+      <c:when test="${scenario.argumentC.description == scenario.argumentA.description}">     
+       <li class="list-group-item"><b>${stakeholders[2]}: </b>
+        I agree with ${stakeholders[0]}.</li>
+      </c:when>
+      <c:when test="${scenario.argumentC.description == scenario.argumentB.description}">     
+       <li class="list-group-item"><b>${stakeholders[2]}: </b>
+        I agree with ${stakeholders[1]}.</li>
+      </c:when>      
+      <c:otherwise>
+       <li class="list-group-item"><b>${stakeholders[2]}: </b>
+        ${scenario.argumentC.description}</li>       
+      </c:otherwise>
+     </c:choose>     
     </ul>
      
     <ol>
@@ -220,26 +242,20 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="case2Policy" value="a" />
-         ${scenario.policyA.description}
+         Share with all
         </label>
        </div>
-       <c:if
-        test="${scenario.policyB.description != scenario.policyA.description}">
-        <div class="radio">
-         <label> <form:radiobutton path="case2Policy" value="b" />
-          ${scenario.policyB.description}
-         </label>
-        </div>
-       </c:if>
-       <c:if
-        test="${scenario.policyC.description != scenario.policyA.description && 
-                scenario.policyC.description != scenario.policyB.description}">
-        <div class="radio">
-         <label> <form:radiobutton path="case2Policy" value="c" />
-          ${scenario.policyC.description}
-         </label>
-        </div>
-       </c:if>
+       <div class="radio">
+        <label> <form:radiobutton path="case2Policy" value="b" />
+         Share with common friends of ${stakeholders[0]},
+         ${stakeholders[1]}, and ${stakeholders[2]}
+        </label>
+       </div>
+       <div class="radio">
+        <label> <form:radiobutton path="case2Policy" value="c" /> 
+         Do not share with others
+        </label>
+       </div>
        <div class="form-group">
         <div class="col-sm-3 radio">
          <label> <form:radiobutton path="case2Policy" value="other" />
