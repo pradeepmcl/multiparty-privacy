@@ -155,18 +155,21 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="case1Policy" value="a" />
-         Share with all
+         Share with all (anyone on or off social media can see the
+         picture).
         </label>
        </div>
        <div class="radio">
         <label> <form:radiobutton path="case1Policy" value="b" />
-         Share with common friends of ${stakeholders[0]},
-         ${stakeholders[1]}, and ${stakeholders[2]}
+         Share with common friends (only common friends of
+         ${stakeholders[0]}, ${stakeholders[1]}, and ${stakeholders[2]}
+         can see the picture).
         </label>
        </div>
        <div class="radio">
-        <label> <form:radiobutton path="case1Policy" value="c" /> 
-         Do not share with others
+        <label> <form:radiobutton path="case1Policy" value="c" />
+         Share among themselves (only ${stakeholders[0]},
+         ${stakeholders[1]}, and ${stakeholders[2]} can see the picture)
         </label>
        </div>
        <div class="form-group">
@@ -206,33 +209,11 @@
      picture. The following are their views.</p>
     <ul class="list-group">
      <li class="list-group-item"><b>${stakeholders[0]}: </b>
-      ${scenario.argumentA.description}</li>
-      
-     <c:choose>
-      <c:when test="${scenario.argumentB.description == scenario.argumentA.description}">     
-       <li class="list-group-item"><b>${stakeholders[1]}: </b>
-        I agree with ${stakeholders[0]}.</li>
-      </c:when>
-      <c:otherwise>
-       <li class="list-group-item"><b>${stakeholders[1]}: </b>
-        ${scenario.argumentB.description}</li>       
-      </c:otherwise>
-     </c:choose>
-
-     <c:choose>
-      <c:when test="${scenario.argumentC.description == scenario.argumentA.description}">     
-       <li class="list-group-item"><b>${stakeholders[2]}: </b>
-        I agree with ${stakeholders[0]}.</li>
-      </c:when>
-      <c:when test="${scenario.argumentC.description == scenario.argumentB.description}">     
-       <li class="list-group-item"><b>${stakeholders[2]}: </b>
-        I agree with ${stakeholders[1]}.</li>
-      </c:when>      
-      <c:otherwise>
-       <li class="list-group-item"><b>${stakeholders[2]}: </b>
-        ${scenario.argumentC.description}</li>       
-      </c:otherwise>
-     </c:choose>     
+      ${scenario.argumentA.description} ${scenario.policyA.description}</li>
+     <li class="list-group-item"><b>${stakeholders[1]}: </b>
+      ${scenario.argumentB.description} ${scenario.policyB.description}</li>
+     <li class="list-group-item"><b>${stakeholders[2]}: </b>
+      ${scenario.argumentC.description} ${scenario.policyC.description}</li>       
     </ul>
      
     <ol>
@@ -242,18 +223,21 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="case2Policy" value="a" />
-         Share with all
+         Share with all (anyone on or off social media can see the
+         picture).
         </label>
        </div>
        <div class="radio">
         <label> <form:radiobutton path="case2Policy" value="b" />
-         Share with common friends of ${stakeholders[0]},
-         ${stakeholders[1]}, and ${stakeholders[2]}
+         Share with common friends (only common friends of
+         ${stakeholders[0]}, ${stakeholders[1]}, and ${stakeholders[2]}
+         can see the picture).
         </label>
        </div>
        <div class="radio">
-        <label> <form:radiobutton path="case2Policy" value="c" /> 
-         Do not share with others
+        <label> <form:radiobutton path="case2Policy" value="c" />
+         Share among themselves (only ${stakeholders[0]},
+         ${stakeholders[1]}, and ${stakeholders[2]} can see the picture)
         </label>
        </div>
        <div class="form-group">
