@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -30,6 +31,10 @@ public class TurkerResponse {
   @Column(name = "response_time", nullable = false)
   @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
   private LocalDateTime responseTime;
+
+  @NotNull
+  @Column(name = "scenario_bundle_id", nullable = false)
+  private int scenarioBundleId;
 
   @NotNull
   @Column(name = "scenario_id", nullable = false)
@@ -73,9 +78,14 @@ public class TurkerResponse {
   @Column(name = "case2_policy_justification", nullable = false)
   private String case2PolicyJustification;
 
-  @NotNull
-  @Column(name = "completion_code", nullable = false)
+  @Column(name = "completion_code")
   private String completionCode;
+  
+  @Transient
+  private int scenarioBundleIndex;
+  
+  @Transient
+  private String scenariosCsv;
 
   public int getId() {
     return id;
@@ -99,6 +109,14 @@ public class TurkerResponse {
 
   public void setResponseTime(LocalDateTime responseTime) {
     this.responseTime = responseTime;
+  }
+
+  public int getScenarioBundleId() {
+    return scenarioBundleId;
+  }
+
+  public void setScenarioBundleId(int scenarioBundleId) {
+    this.scenarioBundleId = scenarioBundleId;
   }
 
   public int getScenarioId() {
@@ -196,6 +214,22 @@ public class TurkerResponse {
   public void setCase2PolicyJustification(String case2PolicyJustification) {
     this.case2PolicyJustification = case2PolicyJustification;
   }
+  
+  public String getScenariosCsv() {
+    return scenariosCsv;
+  }
+
+  public void setScenariosCsv(String scenariosCsv) {
+    this.scenariosCsv = scenariosCsv;
+  }
+
+  public int getScenarioBundleIndex() {
+    return scenarioBundleIndex;
+  }
+
+  public void setScenarioBundleIndex(int scenarioBundleIndex) {
+    this.scenarioBundleIndex = scenarioBundleIndex;
+  }
 
   public String getPolicy(String _case) {
     if (_case.equals("case1")) {
@@ -227,6 +261,19 @@ public class TurkerResponse {
     }
   }
 
+  public void resetResponse() {
+    imageSensitivity = null;
+    imageSentiment = null;
+    imageRelationship = null;
+    imagePeopleCount = null;
+    case1Policy = null;
+    case1PolicyOther = null;
+    case1PolicyJustification = null;
+    case2Policy = null;
+    case2PolicyOther = null;
+    case2PolicyJustification = null;
+  }
+  
   @Override
   public int hashCode() {
     final int prime = 31;

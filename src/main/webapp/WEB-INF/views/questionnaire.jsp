@@ -44,7 +44,7 @@
      </ul>
      <ul class="nav navbar-nav navbar-right">
       <li class="active"><a href="./">MTurk ID:
-        ${turker_response.mturkId}</a></li>
+        ${turkerResponse.mturkId}</a></li>
      </ul>
     </div>
     <!--/.nav-collapse -->
@@ -67,8 +67,11 @@
   
   <c:set var="stakeholders" value="${fn:split(scenario.image.stakeholders,',')}"/>
   
-  <form:form method="POST" modelAttribute="turker_response">
+  <form:form method="POST" modelAttribute="turkerResponse">
    <form:input type="hidden" path="mturkId" id="mturkId" />
+   <form:input type="hidden" path="scenarioBundleId" id="scenarioBundleId" />
+   <form:input type="hidden" path="scenarioBundleIndex" id="scenarioBundleIndex" />
+   <form:input type="hidden" path="scenariosCsv" id="scenariosCsv" />
    <form:input type="hidden" path="scenarioId" id="scenarioId" />
    
    <h3>Questions about the picture</h3>
@@ -268,12 +271,24 @@
      </li>
     </ol>
    </div>
-   
+
    <div class="text-center">
-    <button type="submit" class="btn btn-primary btn-lg">Submit
-     Responses</button>
+    <c:choose>
+     <c:when test="${turkerResponse.scenarioBundleIndex lt 4}">
+      <button type="submit" class="btn btn-primary btn-lg">Sumbit
+       Responses &raquo;</button>
+     </c:when>
+     <c:otherwise>
+      <button type="submit" class="btn btn-primary btn-lg">Submit
+       Responses</button>
+     </c:otherwise>
+    </c:choose>
+    <p>
+     <br>
+     <b>Note:</b> Once you submit responses, you cannot edit them again
+    </p>
    </div>
-   
+
   </form:form>
 
  </div>
@@ -285,5 +300,12 @@
  <script
   src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
  <script src="resources/js/bootstrap.min.js"></script>
+ 
+ <script type="text/javascript">
+  $('button:submit').click(function() {
+    $('button:submit').attr("disabled", true);
+    $('form').submit();
+  });
+ </script>
 </body>
 </html>

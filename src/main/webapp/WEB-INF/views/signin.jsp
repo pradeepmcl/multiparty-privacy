@@ -36,7 +36,7 @@
 <body>
  <div class="container">
   <c:url var="postUrl" value="/questionnaire" />
-  <form:form class="form-signin" modelAttribute="turker_response"
+  <form:form class="form-signin" modelAttribute="turkerResponse"
    method="POST" action="${postUrl}">
    <h2 class="form-signin-heading">Please sign in</h2>
    <label for="mturkId" class="sr-only"> Amazon Mechanical Turk

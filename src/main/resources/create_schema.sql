@@ -53,10 +53,19 @@ CREATE TABLE scenario (
   FOREIGN KEY (argument_c_id) REFERENCES argument(id)
 );
 
+CREATE TABLE scenario_bundle (
+  id INT NOT NULL auto_increment,
+  scenarios_csv VARCHAR(50) NOT NULL,
+  num_attempted INT NOT NULL,
+  num_completed INT NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE turker_response (
   id INT NOT NULL auto_increment,
   mturk_id VARCHAR(20) NOT NULL,
   response_time DATETIME NOT NULL,
+  scenario_bundle_id INT NOT NULL,
   scenario_id INT NOT NULL,
   image_sensitivity VARCHAR(20) NOT NULL,
   image_sentiment VARCHAR(20) NOT NULL,
@@ -68,7 +77,8 @@ CREATE TABLE turker_response (
   case2_policy VARCHAR(20) NOT NULL,
   case2_policy_other VARCHAR(500),
   case2_policy_justification VARCHAR(2000) NOT NULL,
-  completion_code VARCHAR(20) NOT NULL,
+  completion_code VARCHAR(20),
   PRIMARY KEY (id),
+  FOREIGN KEY (scenario_bundle_id) REFERENCES scenario_bundle(id),
   FOREIGN KEY (scenario_id) REFERENCES scenario(id)
 );
