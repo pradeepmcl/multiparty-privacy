@@ -13,13 +13,19 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.ncsu.mas.platys.multiparty_privacy.model.Scenario;
 import edu.ncsu.mas.platys.multiparty_privacy.model.ScenarioBundle;
-import edu.ncsu.mas.platys.multiparty_privacy.model.TurkerResponse;
+import edu.ncsu.mas.platys.multiparty_privacy.model.Turker;
+import edu.ncsu.mas.platys.multiparty_privacy.model.TurkerPostsurveyResponse;
+import edu.ncsu.mas.platys.multiparty_privacy.model.TurkerPresurveyResponse;
+import edu.ncsu.mas.platys.multiparty_privacy.model.TurkerPicturesurveyResponse;
 import edu.ncsu.mas.platys.multiparty_privacy.service.ScenarioBundleService;
 import edu.ncsu.mas.platys.multiparty_privacy.service.ScenarioService;
-import edu.ncsu.mas.platys.multiparty_privacy.service.TurkerResponseService;
+import edu.ncsu.mas.platys.multiparty_privacy.service.TurkerPostsurveyResponseService;
+import edu.ncsu.mas.platys.multiparty_privacy.service.TurkerPresurveyResponseService;
+import edu.ncsu.mas.platys.multiparty_privacy.service.TurkerPicturesurveyResponseService;
 import edu.ncsu.mas.platys.multiparty_privacy.util.RandomCodeGenerator;
 
 @Controller
@@ -33,8 +39,14 @@ public class AppController {
   ScenarioBundleService scenarioBundleService;
 
   @Autowired
-  TurkerResponseService turkerResponseService;
+  TurkerPicturesurveyResponseService pictureResponseService;
+  
+  @Autowired
+  TurkerPresurveyResponseService presurveyResponseService;
 
+  @Autowired
+  TurkerPostsurveyResponseService postsurveyResponseService;
+  
   @Autowired
   MessageSource messageSource;
 
@@ -43,111 +55,167 @@ public class AppController {
   
   private static final String PAGE_SIGNIN = "signin";
   private static final String PAGE_SIGNIN_FAILURE = "signin_failure"; // TODO
+  private static final String PAGE_PRESURVEY = "presurvey";
+  private static final String PAGE_REDIRECT_PRESURVEY = "redirect:presurvey";
   private static final String PAGE_QUESTIONNAIRE = "questionnaire";
+  private static final String PAGE_REDIRECT_QUESTIONNAIRE = "redirect:questionnaire";
+  private static final String PAGE_POSTSURVEY = "postsurvey";
+  private static final String PAGE_REDIRECT_POSTSURVEY = "redirect:postsurvey";
   private static final String PAGE_SUCCESS = "success";
+  private static final String PAGE_REDIRECT_SUCCESS = "redirect:success";
   
-  private static final String ATTR_SCENARIO = "scenario";
-  private static final String ATTR_TURKER_RESPONSE = "turkerResponse"; //TODO Rename
+  private static final String ATTR_TURKER = "turker";
   private static final String ATTR_MTURK_ID = "mturkId";
+  private static final String ATTR_TURKER_PRESURVEY_RESPONSE = "presurveyResponse";
+  private static final String ATTR_TURKER_RESPONSE = "picturesurveyResponse";
+  private static final String ATTR_TURKER_POSTSURVEY_RESPONSE = "postsurveyResponse";
+  private static final String ATTR_SCENARIO = "scenario";
   private static final String ATTR_COMPLETION_CODE =  "completionCode";
   
   Random rand = new Random();
   
   RandomCodeGenerator randCodeGen = new RandomCodeGenerator(8);
 
-  /*
-   * This method shows the signin page.
-   */
   @RequestMapping(value = { "/", "/" + PAGE_SIGNIN }, method = RequestMethod.GET)
   public String showSignIn(ModelMap model) {
-    model.addAttribute(ATTR_TURKER_RESPONSE, new TurkerResponse());
+    model.addAttribute(ATTR_TURKER, new Turker());
     return PAGE_SIGNIN;
   }
 
-  /*
-   * This method validates the signin ID and loads the questionnaire page.
-   */
-  @RequestMapping(value = { "/" + PAGE_QUESTIONNAIRE }, method = RequestMethod.POST)
-  public String showQuestionnaire(@ModelAttribute(ATTR_SCENARIO) Scenario scenario,
-      @ModelAttribute(ATTR_TURKER_RESPONSE) TurkerResponse turkerResponse, BindingResult result,
-      ModelMap model) {
-    if (isMturkIDValid(turkerResponse.getMturkId())) {
-      if (turkerResponse.getScenarioBundleId() == 0) {
-        // The page is being loaded for the first time (0 is the default value)
-        ScenarioBundle bundle = getScenarioBundle();        
-        String[] scenarios = bundle.getScenariosCsv().split(",");
-        int scenarioId =  Integer.parseInt(scenarios[0]);
-        scenario = scenarioService.findById(scenarioId);
-        
-        turkerResponse.setScenarioBundleId(bundle.getId());
-        turkerResponse.setScenarioBundleIndex(0);
-        turkerResponse.setScenariosCsv(bundle.getScenariosCsv());
-        turkerResponse.setScenarioId(scenarioId);
-        
-        model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
-        model.addAttribute(ATTR_SCENARIO, scenario);
-        return PAGE_QUESTIONNAIRE;
-      } else {
-        // A response was submitted
-        if (isTurkerResponseValid(turkerResponse, result, model)) {
-          turkerResponse.setResponseTime(LocalDateTime.now());
-          String pageToReturn = PAGE_QUESTIONNAIRE;
-          int scenarioIndex = turkerResponse.getScenarioBundleIndex() + 1;
-          if (scenarioIndex >= MAX_SCENARIOS) {
-            // Last response
-            turkerResponse.setCompletionCode(randCodeGen.nextString());
-            turkerResponseService.saveResponse(turkerResponse);
-            
-            model.addAttribute(ATTR_MTURK_ID, turkerResponse.getMturkId());
-            model.addAttribute(ATTR_COMPLETION_CODE, turkerResponse.getCompletionCode());
-            pageToReturn = PAGE_SUCCESS;
-          } else {
-            // Show next scenario
-            turkerResponseService.saveResponse(turkerResponse);
-            
-            String scenarioCsv = turkerResponse.getScenariosCsv();
-            String[] scenarios = scenarioCsv.split(",");
-            int scenarioId = Integer.parseInt(scenarios[scenarioIndex]);
-            scenario = scenarioService.findById(scenarioId);
-            
-            turkerResponse.resetResponse();
-            turkerResponse.setScenarioId(scenarioId);
-            turkerResponse.setScenarioBundleIndex(scenarioIndex);
-            
-            model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
-            model.addAttribute(ATTR_SCENARIO, scenario);
-            model.addAttribute(ATTR_MTURK_ID, turkerResponse.getMturkId());
-          }
-          
-          return pageToReturn;
-        } else {
-          // An invalid response was submitted, go back
-          scenario = scenarioService.findById(turkerResponse.getScenarioId());
-          
-          model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
-          model.addAttribute(ATTR_SCENARIO, scenario);
-          return PAGE_QUESTIONNAIRE;
-        }
-      }     
+  @RequestMapping(value = { "/", "/" + PAGE_SIGNIN }, method = RequestMethod.POST)
+  public String processSignIn(@ModelAttribute(ATTR_TURKER) Turker turker,
+      final RedirectAttributes redirectAttributes) {
+    if (isMturkIDValid(turker.getMturkId())) {
+      redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, turker.getMturkId());
+      return PAGE_REDIRECT_PRESURVEY;
     } else {
-      return PAGE_SIGNIN_FAILURE; // TODO: This page does not exist
+      return PAGE_SIGNIN_FAILURE;
     }
   }
 
-  private boolean isMturkIDValid(String mturkID) {
-    if (mturkID != null && !mturkID.isEmpty()) {
-      // TODO: Check that the user does not exceed permitted number of HIT
-      // responses.
-      return true;
+  @RequestMapping(value = { "/" + PAGE_PRESURVEY }, method = RequestMethod.GET)
+  public String showPresurvey(@ModelAttribute(ATTR_MTURK_ID) String mturkId, BindingResult result,
+      ModelMap model) {
+    TurkerPresurveyResponse presurveyResponse = new TurkerPresurveyResponse();
+    presurveyResponse.setMturkId(mturkId);
+    model.addAttribute(ATTR_TURKER_PRESURVEY_RESPONSE, presurveyResponse);
+    return PAGE_PRESURVEY;
+  }
+  
+  @RequestMapping(value = { "/" + PAGE_PRESURVEY }, method = RequestMethod.POST)
+  public String processPresurveyResponse(
+      @ModelAttribute(ATTR_TURKER_PRESURVEY_RESPONSE) TurkerPresurveyResponse presurveyResponse,
+      BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
+    if (isTurkerPresurveyResponseValid(presurveyResponse, result, model)) {
+      presurveyResponse.setResponseTime(LocalDateTime.now());
+      presurveyResponseService.saveResponse(presurveyResponse);
+      
+      redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, presurveyResponse.getMturkId());
+      return PAGE_REDIRECT_QUESTIONNAIRE;
+    } else {
+      // Page has errors
+      return PAGE_PRESURVEY;
     }
-    return false;
+  }
+
+  @RequestMapping(value = { "/" + PAGE_QUESTIONNAIRE }, method = RequestMethod.GET)
+  public String showQuestionnaire(@ModelAttribute(ATTR_MTURK_ID) String mturkId,
+      BindingResult result, ModelMap model) {
+    ScenarioBundle bundle = getScenarioBundle();
+    String[] scenarios = bundle.getScenariosCsv().split(",");
+    int scenarioId = Integer.parseInt(scenarios[0]);
+    Scenario scenario = scenarioService.findById(scenarioId);
+    model.addAttribute(ATTR_SCENARIO, scenario);
+
+    TurkerPicturesurveyResponse turkerResponse = new TurkerPicturesurveyResponse();
+    turkerResponse.setMturkId(mturkId);
+    turkerResponse.setScenarioBundleId(bundle.getId());
+    turkerResponse.setScenarioBundleIndex(0);
+    turkerResponse.setScenariosCsv(bundle.getScenariosCsv());
+    turkerResponse.setScenarioId(scenarioId);
+    model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
+
+    return PAGE_QUESTIONNAIRE;
+  }
+  
+  @RequestMapping(value = { "/" + PAGE_QUESTIONNAIRE }, method = RequestMethod.POST)
+  public String processQuestionnaireResponse(
+      @ModelAttribute(ATTR_TURKER_RESPONSE) TurkerPicturesurveyResponse turkerResponse, BindingResult result,
+      ModelMap model, final RedirectAttributes redirectAttributes) {
+    if (isTurkerResponseValid(turkerResponse, result, model)) {
+      // A valid response was submitted
+      turkerResponse.setResponseTime(LocalDateTime.now());
+      pictureResponseService.saveResponse(turkerResponse);
+
+      int scenarioIndex = turkerResponse.getScenarioBundleIndex() + 1;
+      if (scenarioIndex < MAX_SCENARIOS) {
+        // Show next scenario
+        String scenarioCsv = turkerResponse.getScenariosCsv();
+        String[] scenarios = scenarioCsv.split(",");
+        int scenarioId = Integer.parseInt(scenarios[scenarioIndex]);
+        Scenario scenario = scenarioService.findById(scenarioId);
+        model.addAttribute(ATTR_SCENARIO, scenario);
+        
+        turkerResponse.resetResponse();
+        turkerResponse.setScenarioId(scenarioId);
+        turkerResponse.setScenarioBundleIndex(scenarioIndex);
+        model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
+        
+        return PAGE_QUESTIONNAIRE;
+      } else {
+        // Last response
+        redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, turkerResponse.getMturkId());
+        return PAGE_REDIRECT_POSTSURVEY;
+      }
+    } else {
+      // An invalid response was submitted, go back
+      Scenario scenario = scenarioService.findById(turkerResponse.getScenarioId());
+      model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
+      model.addAttribute(ATTR_SCENARIO, scenario);
+      return PAGE_QUESTIONNAIRE;
+    }
+  }
+
+  @RequestMapping(value = { "/" + PAGE_POSTSURVEY }, method = RequestMethod.GET)
+  public String showPostsurvey(@ModelAttribute(ATTR_MTURK_ID) String mturkId, BindingResult result,
+      ModelMap model) {
+    TurkerPostsurveyResponse postsurveyResponse = new TurkerPostsurveyResponse();
+    postsurveyResponse.setMturkId(mturkId);
+    model.addAttribute(ATTR_TURKER_POSTSURVEY_RESPONSE, postsurveyResponse);
+    return PAGE_POSTSURVEY;
+  }
+    
+  @RequestMapping(value = { "/" + PAGE_POSTSURVEY }, method = RequestMethod.POST)
+  public String processPostsurveyResponse(
+      @ModelAttribute(ATTR_TURKER_POSTSURVEY_RESPONSE) TurkerPostsurveyResponse postsurveyResponse,
+      BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
+    if (isTurkerPostsurveyResponseValid(postsurveyResponse, result, model)) {
+      postsurveyResponse.setResponseTime(LocalDateTime.now());
+      postsurveyResponse.setCompletionCode(randCodeGen.nextString());
+      postsurveyResponseService.saveResponse(postsurveyResponse);
+
+      redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, postsurveyResponse.getMturkId());
+      redirectAttributes.addFlashAttribute(ATTR_COMPLETION_CODE, randCodeGen.nextString());
+      return PAGE_REDIRECT_SUCCESS;
+    } else {
+      // Page has errors
+      return PAGE_POSTSURVEY;
+    }
+  }
+
+  @RequestMapping(value = { "/" + PAGE_SUCCESS }, method = RequestMethod.GET)
+  public String showSuccess(@ModelAttribute(ATTR_MTURK_ID) String mturkId,
+      @ModelAttribute(ATTR_COMPLETION_CODE) String completionCode, BindingResult result,
+      ModelMap model) {
+    model.addAttribute(ATTR_MTURK_ID, mturkId);
+    model.addAttribute(ATTR_COMPLETION_CODE, completionCode);
+    return PAGE_SUCCESS;
   }
 
   // TODO
   private ScenarioBundle getScenarioBundle() {
     return scenarioBundleService.findById(1);
   }
-  
 
   /*
   private Scenario getARandomScenario() {
@@ -178,8 +246,21 @@ public class AppController {
    * }
    */
   
-  // TODO: I am not sure if this is the standard way of validating
-  private boolean isTurkerResponseValid(TurkerResponse turkerResponse, BindingResult result,
+  private boolean isMturkIDValid(String mturkID) {
+    if (mturkID != null && !mturkID.isEmpty()) {
+      // TODO: Check that the user does not exceed permitted number of HIT
+      // responses.
+      return true;
+    }
+    return false;
+  }
+
+  private boolean isTurkerPresurveyResponseValid(TurkerPresurveyResponse presurveyResponse,
+      BindingResult result, ModelMap model) {
+    return true; // TODO
+  }
+
+  private boolean isTurkerResponseValid(TurkerPicturesurveyResponse turkerResponse, BindingResult result,
       ModelMap model) {
     boolean isValid = true;
 
@@ -190,7 +271,7 @@ public class AppController {
     return isValid;
   }
 
-  private boolean validateTurkerResponseForImageQuestions(TurkerResponse turkerResponse,
+  private boolean validateTurkerResponseForImageQuestions(TurkerPicturesurveyResponse turkerResponse,
       BindingResult result, boolean isValid) {
     if (turkerResponse.getImageSensitivity() == null || turkerResponse.getImageSentiment() == null
         || turkerResponse.getImageRelationship() == null
@@ -204,7 +285,7 @@ public class AppController {
     return isValid;
   }
 
-  private boolean validateTurkerResponseForCase(TurkerResponse turkerResponse,
+  private boolean validateTurkerResponseForCase(TurkerPicturesurveyResponse turkerResponse,
       BindingResult result, String _case, boolean isValid) {
     if (turkerResponse.getPolicy(_case) == null) {
       FieldError error = new FieldError("turkerResponse", _case + "Policy",
@@ -230,4 +311,10 @@ public class AppController {
     }
     return isValid;
   }
+  
+  private boolean isTurkerPostsurveyResponseValid(TurkerPostsurveyResponse postsurveyResponse,
+      BindingResult result, ModelMap model) {
+    return true; // TODO
+  }
+
 }

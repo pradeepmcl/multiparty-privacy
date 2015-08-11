@@ -22,16 +22,6 @@
 <!-- Custom styles for this template -->
 <link href="resources/css/multiparty-privacy.css" rel="stylesheet">
 
-<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-<!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
-
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 
 <body>
@@ -55,7 +45,7 @@
       <li><a href="#">Contact</a></li>
      </ul>
      <ul class="nav navbar-nav navbar-right">
-      <li class="active"><a href="./">MTurk ID: ${mturkId}</a></li>
+      <li class="active"><a href="./">MTurk ID: ${presurveyResponse.mturkId}</a></li>
      </ul>
     </div>
     <!--/.nav-collapse -->
@@ -63,13 +53,31 @@
    <!--/.container-fluid -->
   </nav>
 
-
+  <!-- progressbar -->
+  <ul id="progressbar">
+   <li class="active">Pre-Survey</li>
+   <c:forEach begin="1" end="5" varStatus="loop">
+    <li>Picture ${loop.index}</li>
+   </c:forEach>
+   <li>Post-Survey</li>
+  </ul>
 
   <!-- Main component for a primary marketing message or call to action -->
   <div class="jumbotron lead">
-   <p>Thanks for submitting a response. You completion code is <b>${completionCode}</b></p>
+   <p>This is a pre-survey</p>
   </div>
-  
+
+  <form:form method="POST" modelAttribute="preSurveyResponse">
+   <div class="text-center">
+    <button type="submit" class="btn btn-primary btn-lg">Submit
+     Responses &raquo;</button>
+    <p>
+     <br> <b>Note:</b> After submitting the responses, you cannot edit
+     them again.
+    </p>
+   </div>
+  </form:form>
+
  </div>
  <!-- /container -->
 

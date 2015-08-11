@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "turker_response")
-public class TurkerResponse {
+public class TurkerPicturesurveyResponse {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,9 +77,6 @@ public class TurkerResponse {
   @NotBlank
   @Column(name = "case2_policy_justification", nullable = false)
   private String case2PolicyJustification;
-
-  @Column(name = "completion_code")
-  private String completionCode;
   
   @Transient
   private int scenarioBundleIndex;
@@ -149,14 +146,6 @@ public class TurkerResponse {
 
   public void setCase1PolicyJustification(String policyJustification) {
     this.case1PolicyJustification = policyJustification;
-  }
-
-  public String getCompletionCode() {
-    return completionCode;
-  }
-
-  public void setCompletionCode(String completionCode) {
-    this.completionCode = completionCode;
   }
 
   public String getImageSensitivity() {
@@ -288,9 +277,9 @@ public class TurkerResponse {
       return true;
     if (obj == null)
       return false;
-    if (!(obj instanceof TurkerResponse))
+    if (!(obj instanceof TurkerPicturesurveyResponse))
       return false;
-    TurkerResponse other = (TurkerResponse) obj;
+    TurkerPicturesurveyResponse other = (TurkerPicturesurveyResponse) obj;
     if (id != other.id)
       return false;
     return true;

@@ -44,7 +44,7 @@
      </ul>
      <ul class="nav navbar-nav navbar-right">
       <li class="active"><a href="./">MTurk ID:
-        ${turkerResponse.mturkId}</a></li>
+        ${picturesurveyResponse.mturkId}</a></li>
      </ul>
     </div>
     <!--/.nav-collapse -->
@@ -54,12 +54,14 @@
   
   <!-- progressbar -->
   <ul id="progressbar">
+   <li class="active">Pre-Survey</li>
    <c:forEach begin="0" end="${turkerResponse.scenarioBundleIndex}" varStatus="loop">
     <li class="active">Picture ${loop.index + 1}</li>
    </c:forEach>
    <c:forEach begin="${turkerResponse.scenarioBundleIndex + 1}" end="4" varStatus="loop">
     <li>Picture ${loop.index + 1}</li>
-   </c:forEach>    
+   </c:forEach>  
+   <li>Post-Survey</li>  
   </ul>
 
   <h3>Task</h3>
@@ -77,7 +79,7 @@
   
   <c:set var="stakeholders" value="${fn:split(scenario.image.stakeholders,',')}"/>
   
-  <form:form method="POST" modelAttribute="turkerResponse">
+  <form:form method="POST" modelAttribute="picturesurveyResponse">
    <form:input type="hidden" path="mturkId" id="mturkId" />
    <form:input type="hidden" path="scenarioBundleId" id="scenarioBundleId" />
    <form:input type="hidden" path="scenarioBundleIndex" id="scenarioBundleIndex" />
@@ -283,19 +285,11 @@
    </div>
 
    <div class="text-center">
-    <c:choose>
-     <c:when test="${turkerResponse.scenarioBundleIndex lt 4}">
-      <button type="submit" class="btn btn-primary btn-lg">Sumbit
-       Responses &raquo;</button>
-     </c:when>
-     <c:otherwise>
-      <button type="submit" class="btn btn-primary btn-lg">Submit
-       Responses</button>
-     </c:otherwise>
-    </c:choose>
+    <button type="submit" class="btn btn-primary btn-lg">Submit
+     Responses &raquo;</button>
     <p>
-     <br>
-     <b>Note:</b> Once you submit responses, you cannot edit them again
+     <br> <b>Note:</b> After submitting the responses, you cannot
+     edit them again.
     </p>
    </div>
 

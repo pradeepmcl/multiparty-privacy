@@ -61,7 +61,14 @@ CREATE TABLE scenario_bundle (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE turker_response (
+CREATE TABLE turker_presurvey_response (
+  id INT NOT NULL auto_increment,
+  mturk_id VARCHAR(20) NOT NULL,
+  response_time DATETIME NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE turker_picturesurvey_response (
   id INT NOT NULL auto_increment,
   mturk_id VARCHAR(20) NOT NULL,
   response_time DATETIME NOT NULL,
@@ -77,8 +84,15 @@ CREATE TABLE turker_response (
   case2_policy VARCHAR(20) NOT NULL,
   case2_policy_other VARCHAR(500),
   case2_policy_justification VARCHAR(2000) NOT NULL,
-  completion_code VARCHAR(20),
   PRIMARY KEY (id),
   FOREIGN KEY (scenario_bundle_id) REFERENCES scenario_bundle(id),
   FOREIGN KEY (scenario_id) REFERENCES scenario(id)
+);
+
+CREATE TABLE turker_postsurvey_response (
+  id INT NOT NULL auto_increment,
+  mturk_id VARCHAR(20) NOT NULL,
+  response_time DATETIME NOT NULL,
+  completion_code VARCHAR(20) NOT NULL,
+  PRIMARY KEY (id)
 );
