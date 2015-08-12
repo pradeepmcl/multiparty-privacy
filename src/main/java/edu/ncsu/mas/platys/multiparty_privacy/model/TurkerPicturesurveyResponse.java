@@ -15,7 +15,7 @@ import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "turker_response")
+@Table(name = "turker_picturesurvey_response")
 public class TurkerPicturesurveyResponse {
 
   @Id

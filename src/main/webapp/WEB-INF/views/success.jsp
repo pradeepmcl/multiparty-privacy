@@ -67,7 +67,10 @@
 
   <!-- Main component for a primary marketing message or call to action -->
   <div class="jumbotron lead">
-   <p>Thanks for submitting a response. You completion code is <b>${completionCode}</b></p>
+   <p>
+    We sincerely <b>thank you</b> for completing the study. Your
+    completion code is <b>${completionCode}</b>
+   </p>
   </div>
   
  </div>
