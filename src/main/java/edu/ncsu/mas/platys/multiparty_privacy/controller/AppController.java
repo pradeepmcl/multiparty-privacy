@@ -1,7 +1,6 @@
 package edu.ncsu.mas.platys.multiparty_privacy.controller;
 
 import java.util.Locale;
-import java.util.Random;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +70,6 @@ public class AppController {
   private static final String ATTR_TURKER_POSTSURVEY_RESPONSE = "postsurveyResponse";
   private static final String ATTR_SCENARIO = "scenario";
   private static final String ATTR_COMPLETION_CODE =  "completionCode";
-  
-  Random rand = new Random();
   
   RandomCodeGenerator randCodeGen = new RandomCodeGenerator(8);
 
@@ -226,17 +223,6 @@ public class AppController {
     return scenario;
   }*/
 
-  /**
-   * Returns a pseudo-random number between min and max, inclusive. The
-   * difference between min and max can be at most
-   * <code>Integer.MAX_VALUE - 1</code>.
-   */
-  /*
-  private int randInt(int min, int max) {
-    // nextInt is exclusive of the top value; add 1 to make it inclusive
-    int randomNum = rand.nextInt((max - min) + 1) + min;
-    return randomNum;
-  }*/
 
   // This is some reusable code
   /*
