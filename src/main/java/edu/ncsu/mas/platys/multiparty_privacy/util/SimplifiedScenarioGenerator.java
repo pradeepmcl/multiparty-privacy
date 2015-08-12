@@ -14,13 +14,15 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * This is a utility class meant to run before the webapp is used. The class
- * populates the Scenario table in the database, which the webapp employs.
+ * This is a simplified version of the ScenarioGenerator. I once used these set
+ * of scenarios. This is a utility class meant to run before the webapp is used.
+ * The class populates the Scenario table in the database, which the webapp
+ * employs.
  * 
  * @author pmuruka
  *
  */
-public class ScenarioGenerator2 {
+public class SimplifiedScenarioGenerator {
 
   private void generateScenarios() {
     Properties props = new Properties();
@@ -117,7 +119,7 @@ public class ScenarioGenerator2 {
   }
 
   public static void main(String[] args) {
-    ScenarioGenerator2 scenarioGen = new ScenarioGenerator2();
+    SimplifiedScenarioGenerator scenarioGen = new SimplifiedScenarioGenerator();
     scenarioGen.generateScenarios();
   }
 }
