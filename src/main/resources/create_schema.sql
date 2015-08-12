@@ -67,6 +67,8 @@ CREATE TABLE turker_presurvey_response (
   gender VARCHAR(20) NOT NULL,
   age VARCHAR(20) NOT NULL,
   education VARCHAR(20) NOT NULL,
+  socialmedia_frequency VARCHAR(20) NOT NULL,
+  sharing_frequency VARCHAR(20) NOT NULL,
   PRIMARY KEY (id)
 );
 

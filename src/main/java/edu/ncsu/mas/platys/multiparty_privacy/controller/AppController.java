@@ -65,9 +65,9 @@ public class AppController {
   
   private static final String ATTR_TURKER = "turker";
   private static final String ATTR_MTURK_ID = "mturkId";
-  private static final String ATTR_TURKER_PRESURVEY_RESPONSE = "presurveyResponse";
-  private static final String ATTR_TURKER_RESPONSE = "picturesurveyResponse";
-  private static final String ATTR_TURKER_POSTSURVEY_RESPONSE = "postsurveyResponse";
+  private static final String ATTR_PRESURVEY_RESPONSE = "presurveyResponse";
+  private static final String ATTR_PICTURESURVEY_RESPONSE = "picturesurveyResponse";
+  private static final String ATTR_POSTSURVEY_RESPONSE = "postsurveyResponse";
   private static final String ATTR_SCENARIO = "scenario";
   private static final String ATTR_SCENARIO_BUNDLE_ID =  "scenarioBundleId";
   private static final String ATTR_COMPLETION_CODE =  "completionCode";
@@ -98,13 +98,13 @@ public class AppController {
       ModelMap model) {
     TurkerPresurveyResponse presurveyResponse = new TurkerPresurveyResponse();
     presurveyResponse.setMturkId(mturkId);
-    model.addAttribute(ATTR_TURKER_PRESURVEY_RESPONSE, presurveyResponse);
+    model.addAttribute(ATTR_PRESURVEY_RESPONSE, presurveyResponse);
     return PAGE_PRESURVEY;
   }
   
   @RequestMapping(value = { "/" + PAGE_PRESURVEY }, method = RequestMethod.POST)
   public String processPresurveyResponse(
-      @ModelAttribute(ATTR_TURKER_PRESURVEY_RESPONSE) TurkerPresurveyResponse presurveyResponse,
+      @ModelAttribute(ATTR_PRESURVEY_RESPONSE) TurkerPresurveyResponse presurveyResponse,
       BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
     if (isTurkerPresurveyResponseValid(presurveyResponse, result, model)) {
       presurveyResponse.setResponseTime(LocalDateTime.now());
@@ -133,15 +133,15 @@ public class AppController {
     turkerResponse.setScenarioBundleIndex(0);
     turkerResponse.setScenariosCsv(bundle.getScenariosCsv());
     turkerResponse.setScenarioId(scenarioId);
-    model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
+    model.addAttribute(ATTR_PICTURESURVEY_RESPONSE, turkerResponse);
 
     return PAGE_QUESTIONNAIRE;
   }
   
   @RequestMapping(value = { "/" + PAGE_QUESTIONNAIRE }, method = RequestMethod.POST)
   public String processQuestionnaireResponse(
-      @ModelAttribute(ATTR_TURKER_RESPONSE) TurkerPicturesurveyResponse turkerResponse, BindingResult result,
-      ModelMap model, final RedirectAttributes redirectAttributes) {
+      @ModelAttribute(ATTR_PICTURESURVEY_RESPONSE) TurkerPicturesurveyResponse turkerResponse,
+      BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
     if (isTurkerResponseValid(turkerResponse, result, model)) {
       // A valid response was submitted
       turkerResponse.setResponseTime(LocalDateTime.now());
@@ -159,7 +159,7 @@ public class AppController {
         turkerResponse.resetResponse();
         turkerResponse.setScenarioId(scenarioId);
         turkerResponse.setScenarioBundleIndex(scenarioIndex);
-        model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
+        model.addAttribute(ATTR_PICTURESURVEY_RESPONSE, turkerResponse);
         
         return PAGE_QUESTIONNAIRE;
       } else {
@@ -172,7 +172,7 @@ public class AppController {
     } else {
       // An invalid response was submitted, go back
       Scenario scenario = scenarioService.findById(turkerResponse.getScenarioId());
-      model.addAttribute(ATTR_TURKER_RESPONSE, turkerResponse);
+      model.addAttribute(ATTR_PICTURESURVEY_RESPONSE, turkerResponse);
       model.addAttribute(ATTR_SCENARIO, scenario);
       return PAGE_QUESTIONNAIRE;
     }
@@ -185,13 +185,13 @@ public class AppController {
     TurkerPostsurveyResponse postsurveyResponse = new TurkerPostsurveyResponse();
     postsurveyResponse.setMturkId(mturkId);
     postsurveyResponse.setScenarioBundleId(scenarioBundleId);
-    model.addAttribute(ATTR_TURKER_POSTSURVEY_RESPONSE, postsurveyResponse);
+    model.addAttribute(ATTR_POSTSURVEY_RESPONSE, postsurveyResponse);
     return PAGE_POSTSURVEY;
   }
     
   @RequestMapping(value = { "/" + PAGE_POSTSURVEY }, method = RequestMethod.POST)
   public String processPostsurveyResponse(
-      @ModelAttribute(ATTR_TURKER_POSTSURVEY_RESPONSE) TurkerPostsurveyResponse postsurveyResponse,
+      @ModelAttribute(ATTR_POSTSURVEY_RESPONSE) TurkerPostsurveyResponse postsurveyResponse,
       BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
     if (isTurkerPostsurveyResponseValid(postsurveyResponse, result, model)) {
       postsurveyResponse.setResponseTime(LocalDateTime.now());
@@ -251,31 +251,33 @@ public class AppController {
       BindingResult result, ModelMap model) {
     if (presurveyResponse.getGender() == null || presurveyResponse.getAge() == null
         || presurveyResponse.getEducation() == null) {
-      FieldError error = new FieldError("presurveyResponse", "education", messageSource.getMessage(
-          "mandatory.answers", new String[] { "above" }, Locale.getDefault()));
+      FieldError error = new FieldError(ATTR_PRESURVEY_RESPONSE, "education",
+          messageSource.getMessage("mandatory.answers", new String[] { "above" },
+              Locale.getDefault()));
       result.addError(error);
       return false;
     }
     return true;
   }
 
-  private boolean isTurkerResponseValid(TurkerPicturesurveyResponse turkerResponse,
+  private boolean isTurkerResponseValid(TurkerPicturesurveyResponse picsurveyResponse,
       BindingResult result, ModelMap model) {
     boolean isValid = true;
 
-    isValid = validateTurkerResponseForImageQuestions(turkerResponse, result, isValid);
-    isValid = validateTurkerResponseForCase(turkerResponse, result, "case1", isValid);
-    isValid = validateTurkerResponseForCase(turkerResponse, result, "case2", isValid);
+    isValid = validateTurkerResponseForImageQuestions(picsurveyResponse, result, isValid);
+    isValid = validateTurkerResponseForCase(picsurveyResponse, result, "case1", isValid);
+    isValid = validateTurkerResponseForCase(picsurveyResponse, result, "case2", isValid);
 
     return isValid;
   }
 
   private boolean validateTurkerResponseForImageQuestions(
-      TurkerPicturesurveyResponse turkerResponse, BindingResult result, boolean isValid) {
-    if (turkerResponse.getImageSensitivity() == null || turkerResponse.getImageSentiment() == null
-        || turkerResponse.getImageRelationship() == null
-        || turkerResponse.getImagePeopleCount() == null) {
-      FieldError error = new FieldError("turkerResponse", "imagePeopleCount",
+      TurkerPicturesurveyResponse picsurveyResponse, BindingResult result, boolean isValid) {
+    if (picsurveyResponse.getImageSensitivity() == null
+        || picsurveyResponse.getImageSentiment() == null
+        || picsurveyResponse.getImageRelationship() == null
+        || picsurveyResponse.getImagePeopleCount() == null) {
+      FieldError error = new FieldError(ATTR_PICTURESURVEY_RESPONSE, "imagePeopleCount",
           messageSource.getMessage("mandatory.answers", new String[] { "above" },
               Locale.getDefault()));
       result.addError(error);
@@ -284,26 +286,26 @@ public class AppController {
     return isValid;
   }
 
-  private boolean validateTurkerResponseForCase(TurkerPicturesurveyResponse turkerResponse,
+  private boolean validateTurkerResponseForCase(TurkerPicturesurveyResponse picsurveyResponse,
       BindingResult result, String _case, boolean isValid) {
-    if (turkerResponse.getPolicy(_case) == null) {
-      FieldError error = new FieldError("turkerResponse", _case + "Policy",
+    if (picsurveyResponse.getPolicy(_case) == null) {
+      FieldError error = new FieldError(ATTR_PICTURESURVEY_RESPONSE, _case + "Policy",
           messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
       result.addError(error);
       isValid = false;
-    } else if (turkerResponse.getPolicy(_case).equals("other")
-        && (turkerResponse.getPolicyOther(_case) == null || turkerResponse.getPolicyOther(_case)
-            .isEmpty())) {
-      FieldError error = new FieldError("turkerResponse", _case + "PolicyOther",
+    } else if (picsurveyResponse.getPolicy(_case).equals("other")
+        && (picsurveyResponse.getPolicyOther(_case) == null || picsurveyResponse.getPolicyOther(
+            _case).isEmpty())) {
+      FieldError error = new FieldError(ATTR_PICTURESURVEY_RESPONSE, _case + "PolicyOther",
           messageSource.getMessage("mandatory.if.answer", new String[] { "other policy",
               "in the text box next to it" }, Locale.getDefault()));
       result.addError(error);
       isValid = false;
     }
 
-    if (turkerResponse.getPolicyJustification(_case) == null
-        || turkerResponse.getPolicyJustification(_case).isEmpty()) {
-      FieldError error = new FieldError("turkerResponse", _case + "PolicyJustification",
+    if (picsurveyResponse.getPolicyJustification(_case) == null
+        || picsurveyResponse.getPolicyJustification(_case).isEmpty()) {
+      FieldError error = new FieldError(ATTR_PICTURESURVEY_RESPONSE, _case + "PolicyJustification",
           messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
       result.addError(error);
       isValid = false;
@@ -315,5 +317,4 @@ public class AppController {
       BindingResult result, ModelMap model) {
     return true; // TODO
   }
-
 }

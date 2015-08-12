@@ -43,6 +43,14 @@ public class TurkerPresurveyResponse {
   @Column(name = "education", nullable = false)
   private String education;
 
+  @NotBlank
+  @Column(name = "socialmedia_frequency", nullable = false)
+  private String socialmediaFrequency;
+  
+  @NotBlank
+  @Column(name = "sharing_frequency", nullable = false)
+  private String sharingFrequency;
+
   public int getId() {
     return id;
   }
@@ -89,6 +97,22 @@ public class TurkerPresurveyResponse {
 
   public void setEducation(String education) {
     this.education = education;
+  }
+
+  public String getSocialmediaFrequency() {
+    return socialmediaFrequency;
+  }
+
+  public void setSocialmediaFrequency(String socialmediaFrequency) {
+    this.socialmediaFrequency = socialmediaFrequency;
+  }
+
+  public String getSharingFrequency() {
+    return sharingFrequency;
+  }
+
+  public void setSharingFrequency(String sharingFrequency) {
+    this.sharingFrequency = sharingFrequency;
   }
 
   @Override

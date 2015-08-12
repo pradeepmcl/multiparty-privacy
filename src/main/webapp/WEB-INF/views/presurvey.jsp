@@ -193,11 +193,70 @@
        </div>
       </div>
      </li>
+     
+     <li>
+      <h3>How often do you use social media (e.g., Facebook, Google
+       Plus, Twitter, etc.)?</h3>
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="socialmediaFrequency" value="daily" />
+         Almost every day
+        </label>
+       </div>
+      </div>      
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="socialmediaFrequency" value="weekly" />
+         About once a week
+        </label>
+       </div>
+      </div>      
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="socialmediaFrequency" value="monthly" />
+         About once a month
+        </label>
+       </div>
+      </div>      
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="socialmediaFrequency" value="never" />
+         Never used social media
+        </label>
+       </div>
+      </div>
+     </li>
+     
+     <li>
+      <h3>How many pictures showing you and others have you shared
+       online (e.g., on Facebook, Flickr, email, etc.)?</h3>
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="sharingFrequency" value="several" />
+         Seveal (&gt;10)
+        </label>
+       </div>
+      </div>
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="socialmediaFrequency" value="few" />
+         A few (1&ndash;10)
+        </label>
+       </div>
+      </div>
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="socialmediaFrequency" value="none" />
+         None (0)
+        </label>
+       </div>
+      </div>
+     </li>      
+     
     </ol>
     <div class="has-error">
      <form:errors path="education" class="help-inline" />
     </div>
-        
     
     <div class="text-center">
      <button type="submit" class="btn btn-primary btn-lg">Submit
