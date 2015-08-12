@@ -257,7 +257,14 @@ public class AppController {
 
   private boolean isTurkerPresurveyResponseValid(TurkerPresurveyResponse presurveyResponse,
       BindingResult result, ModelMap model) {
-    return true; // TODO
+    if (presurveyResponse.getGender() == null || presurveyResponse.getAge() == null
+        || presurveyResponse.getEducation() == null) {
+      FieldError error = new FieldError("presurveyResponse", "education", messageSource.getMessage(
+          "mandatory.answers", new String[] { "above" }, Locale.getDefault()));
+      result.addError(error);
+      return false;
+    }
+    return true;
   }
 
   private boolean isTurkerResponseValid(TurkerPicturesurveyResponse turkerResponse, BindingResult result,

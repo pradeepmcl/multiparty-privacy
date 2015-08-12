@@ -34,6 +34,14 @@ public class TurkerPresurveyResponse {
   @NotBlank
   @Column(name = "gender", nullable = false)
   private String gender;
+  
+  @NotBlank
+  @Column(name = "age", nullable = false)
+  private String age;
+
+  @NotBlank
+  @Column(name = "education", nullable = false)
+  private String education;
 
   public int getId() {
     return id;
@@ -65,6 +73,22 @@ public class TurkerPresurveyResponse {
 
   public void setGender(String gender) {
     this.gender = gender;
+  }
+
+  public String getAge() {
+    return age;
+  }
+
+  public void setAge(String age) {
+    this.age = age;
+  }
+
+  public String getEducation() {
+    return education;
+  }
+
+  public void setEducation(String education) {
+    this.education = education;
   }
 
   @Override
