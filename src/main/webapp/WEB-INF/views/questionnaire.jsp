@@ -55,13 +55,15 @@
   <!-- progressbar -->
   <ul id="progressbar">
    <li class="active">Pre-Survey</li>
-   <c:forEach begin="0" end="${turkerResponse.scenarioBundleIndex}" varStatus="loop">
+   <c:forEach begin="0"
+    end="${picturesurveyResponse.scenarioBundleIndex}" varStatus="loop">
     <li class="active">Picture ${loop.index + 1}</li>
    </c:forEach>
-   <c:forEach begin="${turkerResponse.scenarioBundleIndex + 1}" end="4" varStatus="loop">
+   <c:forEach begin="${picturesurveyResponse.scenarioBundleIndex + 1}"
+    end="4" varStatus="loop">
     <li>Picture ${loop.index + 1}</li>
-   </c:forEach>  
-   <li>Post-Survey</li>  
+   </c:forEach>
+   <li>Post-Survey</li>
   </ul>
 
   <h3>Task</h3>

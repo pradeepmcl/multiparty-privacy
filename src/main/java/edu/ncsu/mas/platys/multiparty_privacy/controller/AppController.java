@@ -195,7 +195,8 @@ public class AppController {
       postsurveyResponseService.saveResponse(postsurveyResponse);
 
       redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, postsurveyResponse.getMturkId());
-      redirectAttributes.addFlashAttribute(ATTR_COMPLETION_CODE, randCodeGen.nextString());
+      redirectAttributes.addFlashAttribute(ATTR_COMPLETION_CODE,
+          postsurveyResponse.getCompletionCode());
       return PAGE_REDIRECT_SUCCESS;
     } else {
       // Page has errors
