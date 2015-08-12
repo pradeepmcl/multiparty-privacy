@@ -69,9 +69,12 @@ public class AppController {
   private static final String ATTR_TURKER_RESPONSE = "picturesurveyResponse";
   private static final String ATTR_TURKER_POSTSURVEY_RESPONSE = "postsurveyResponse";
   private static final String ATTR_SCENARIO = "scenario";
+  private static final String ATTR_SCENARIO_BUNDLE_ID =  "scenarioBundleId";
   private static final String ATTR_COMPLETION_CODE =  "completionCode";
   
-  RandomCodeGenerator randCodeGen = new RandomCodeGenerator(8);
+  private int nextBundleId = 1;
+  
+  private final RandomCodeGenerator randCodeGen = new RandomCodeGenerator(8);
 
   @RequestMapping(value = { "/", "/" + PAGE_SIGNIN }, method = RequestMethod.GET)
   public String showSignIn(ModelMap model) {
@@ -162,6 +165,8 @@ public class AppController {
       } else {
         // Last response
         redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, turkerResponse.getMturkId());
+        redirectAttributes.addFlashAttribute(ATTR_SCENARIO_BUNDLE_ID,
+            turkerResponse.getScenarioBundleId());
         return PAGE_REDIRECT_POSTSURVEY;
       }
     } else {
@@ -174,10 +179,12 @@ public class AppController {
   }
 
   @RequestMapping(value = { "/" + PAGE_POSTSURVEY }, method = RequestMethod.GET)
-  public String showPostsurvey(@ModelAttribute(ATTR_MTURK_ID) String mturkId, BindingResult result,
+  public String showPostsurvey(@ModelAttribute(ATTR_MTURK_ID) String mturkId,
+      @ModelAttribute(ATTR_SCENARIO_BUNDLE_ID) int scenarioBundleId, BindingResult result,
       ModelMap model) {
     TurkerPostsurveyResponse postsurveyResponse = new TurkerPostsurveyResponse();
     postsurveyResponse.setMturkId(mturkId);
+    postsurveyResponse.setScenarioBundleId(scenarioBundleId);
     model.addAttribute(ATTR_TURKER_POSTSURVEY_RESPONSE, postsurveyResponse);
     return PAGE_POSTSURVEY;
   }
@@ -190,6 +197,10 @@ public class AppController {
       postsurveyResponse.setResponseTime(LocalDateTime.now());
       postsurveyResponse.setCompletionCode(randCodeGen.nextString());
       postsurveyResponseService.saveResponse(postsurveyResponse);
+      
+      // Update complete count for the bundle. This is probably redundant,
+      // though. Consider getting rid of the num_completed column.
+      scenarioBundleService.incrementNumCompleted(postsurveyResponse.getScenarioBundleId());
 
       redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, postsurveyResponse.getMturkId());
       redirectAttributes.addFlashAttribute(ATTR_COMPLETION_CODE,
@@ -210,19 +221,13 @@ public class AppController {
     return PAGE_SUCCESS;
   }
 
-  // TODO
   private ScenarioBundle getScenarioBundle() {
-    return scenarioBundleService.findById(1);
+    long numBundles = scenarioBundleService.getCount();
+    if (nextBundleId > numBundles) {
+      nextBundleId = 1;
+    }
+    return scenarioBundleService.findById(nextBundleId++);
   }
-
-  /*
-  private Scenario getARandomScenario() {
-    long scenarioCount = scenarioService.getCount();
-    int randomScenario = randInt(1, (int) scenarioCount);
-    Scenario scenario = scenarioService.findById(randomScenario);
-    return scenario;
-  }*/
-
 
   // This is some reusable code
   /*
@@ -254,8 +259,8 @@ public class AppController {
     return true;
   }
 
-  private boolean isTurkerResponseValid(TurkerPicturesurveyResponse turkerResponse, BindingResult result,
-      ModelMap model) {
+  private boolean isTurkerResponseValid(TurkerPicturesurveyResponse turkerResponse,
+      BindingResult result, ModelMap model) {
     boolean isValid = true;
 
     isValid = validateTurkerResponseForImageQuestions(turkerResponse, result, isValid);
@@ -265,8 +270,8 @@ public class AppController {
     return isValid;
   }
 
-  private boolean validateTurkerResponseForImageQuestions(TurkerPicturesurveyResponse turkerResponse,
-      BindingResult result, boolean isValid) {
+  private boolean validateTurkerResponseForImageQuestions(
+      TurkerPicturesurveyResponse turkerResponse, BindingResult result, boolean isValid) {
     if (turkerResponse.getImageSensitivity() == null || turkerResponse.getImageSentiment() == null
         || turkerResponse.getImageRelationship() == null
         || turkerResponse.getImagePeopleCount() == null) {

@@ -107,12 +107,11 @@ public class ScenarioBundleGenerator {
     try (Connection conn = DriverManager.getConnection(props.getProperty("jdbc.url") + "?user="
         + props.getProperty("jdbc.username") + "&password=" + props.getProperty("jdbc.password"));
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO scenario_bundle "
-            + "(scenarios_csv, num_attempted, num_completed) values (?, ?, ?)")) {
+            + "(scenarios_csv, num_completed) values (?, ?)")) {
       int i = 0;
       for (String scenarioBundle : scenarioBundles) {
         stmt.setString(1, scenarioBundle);
         stmt.setInt(2, 0);
-        stmt.setInt(3, 0);
         stmt.addBatch();
         i++;
         if (i % 1000 == 0) {

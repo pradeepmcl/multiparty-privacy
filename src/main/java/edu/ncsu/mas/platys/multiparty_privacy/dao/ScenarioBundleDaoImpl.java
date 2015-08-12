@@ -19,4 +19,11 @@ public class ScenarioBundleDaoImpl extends AbstractDao<Integer, ScenarioBundle> 
     Query query = getSession().createSQLQuery("select count(id) from scenario_bundle");
     return ((BigInteger) query.uniqueResult()).longValue();
   }
+  
+  public void incrementNumCompleted(int bundleId) {
+    Query query = getSession().createSQLQuery(
+        "update scenario_bundle set num_completed = num_completed + 1 where id = :id");
+    query.setInteger("id", bundleId);
+    query.executeUpdate();
+  }
 }

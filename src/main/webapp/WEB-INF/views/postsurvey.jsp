@@ -69,6 +69,7 @@
 
   <form:form method="POST" modelAttribute="postsurveyResponse">
    <form:input type="hidden" path="mturkId" id="mturkId" />
+   <form:input type="hidden" path="scenarioBundleId" id="scenarioBundleId" />
    
    <h3>Post-Study Survey</h3>
    <div class="jumbotron lead">

@@ -23,4 +23,9 @@ public class SecanrioBundleServiceImpl implements ScenarioBundleService {
   public long getCount() {
     return dao.getCount();
   }
+  
+  @Override
+  public void incrementNumCompleted(int bundleId) {
+    dao.incrementNumCompleted(bundleId);
+  }
 }

@@ -15,9 +15,6 @@ public class ScenarioBundle {
   @Column(name = "scenarios_csv", nullable = false)
   private String scenariosCsv;
 
-  @Column(name = "num_attempted", nullable = false)
-  private int numAttempted;
-
   @Column(name = "num_completed", nullable = false)
   private int numCompleted;
 
@@ -35,14 +32,6 @@ public class ScenarioBundle {
 
   public void setScenariosCsv(String scenariosCsv) {
     this.scenariosCsv = scenariosCsv;
-  }
-
-  public int getNumAttempted() {
-    return numAttempted;
-  }
-
-  public void setNumAttempted(int numAttempted) {
-    this.numAttempted = numAttempted;
   }
 
   public int getNumCompleted() {

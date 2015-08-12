@@ -56,7 +56,6 @@ CREATE TABLE scenario (
 CREATE TABLE scenario_bundle (
   id INT NOT NULL auto_increment,
   scenarios_csv VARCHAR(50) NOT NULL,
-  num_attempted INT NOT NULL,
   num_completed INT NOT NULL,
   PRIMARY KEY (id)
 );
@@ -96,6 +95,8 @@ CREATE TABLE turker_postsurvey_response (
   id INT NOT NULL auto_increment,
   mturk_id VARCHAR(20) NOT NULL,
   response_time DATETIME NOT NULL,
+  scenario_bundle_id INT NOT NULL,
   completion_code VARCHAR(20) NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (scenario_bundle_id) REFERENCES scenario_bundle(id)
 );

@@ -30,6 +30,10 @@ public class TurkerPostsurveyResponse {
   @Column(name = "response_time", nullable = false)
   @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
   private LocalDateTime responseTime;
+  
+  @NotNull
+  @Column(name = "scenario_bundle_id", nullable = false)
+  private int scenarioBundleId;
 
   @Column(name = "completion_code")
   private String completionCode;
@@ -58,6 +62,14 @@ public class TurkerPostsurveyResponse {
     this.responseTime = responseTime;
   }
   
+  public int getScenarioBundleId() {
+    return scenarioBundleId;
+  }
+
+  public void setScenarioBundleId(int scenarioBundleId) {
+    this.scenarioBundleId = scenarioBundleId;
+  }
+
   public String getCompletionCode() {
     return completionCode;
   }

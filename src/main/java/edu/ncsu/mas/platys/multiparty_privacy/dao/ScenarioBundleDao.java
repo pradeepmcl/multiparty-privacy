@@ -7,4 +7,6 @@ public interface ScenarioBundleDao {
   ScenarioBundle findById(int id);
   
   long getCount();
+  
+  void incrementNumCompleted(int bundleId);
 }
