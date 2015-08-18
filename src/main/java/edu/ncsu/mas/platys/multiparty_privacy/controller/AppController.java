@@ -196,6 +196,14 @@ public class AppController {
     if (isTurkerPostsurveyResponseValid(postsurveyResponse, result, model)) {
       postsurveyResponse.setResponseTime(LocalDateTime.now());
       postsurveyResponse.setCompletionCode(randCodeGen.nextString());
+      if (postsurveyResponse.getConflictExperienceTypeArray().length > 0) {
+        StringBuffer conflictAllTypes = new StringBuffer();
+        for (String conflictType : postsurveyResponse.getConflictExperienceTypeArray()) {
+          conflictAllTypes.append(conflictType + ",");
+        }
+        postsurveyResponse.setConflictExperienceType(conflictAllTypes.replace(
+            conflictAllTypes.length() - 1, conflictAllTypes.length(), "").toString());
+      }
       postsurveyResponseService.saveResponse(postsurveyResponse);
       
       // Update complete count for the bundle. This is probably redundant,

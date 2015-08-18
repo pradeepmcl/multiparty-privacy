@@ -233,20 +233,20 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="sharingFrequency" value="several" />
-         Seveal (&gt;10)
+         Several (&gt;10)
         </label>
        </div>
       </div>
       <div class="form-horizontal">
        <div class="radio">
-        <label> <form:radiobutton path="socialmediaFrequency" value="few" />
+        <label> <form:radiobutton path="sharingFrequency" value="few" />
          A few (1&ndash;10)
         </label>
        </div>
       </div>
       <div class="form-horizontal">
        <div class="radio">
-        <label> <form:radiobutton path="socialmediaFrequency" value="none" />
+        <label> <form:radiobutton path="sharingFrequency" value="none" />
          None (0)
         </label>
        </div>
