@@ -217,8 +217,12 @@
        </c:forEach>             
       </div>
      </li>
-
     </ol>
+    
+    <div class="has-error">
+     <form:errors path="preferenceArgumentConfidence" class="help-inline" />
+    </div>
+    
    </div>      
    
    <div class="text-center">

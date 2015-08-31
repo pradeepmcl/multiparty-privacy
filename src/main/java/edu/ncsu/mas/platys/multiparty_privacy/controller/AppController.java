@@ -353,6 +353,23 @@ public class AppController {
   
   private boolean isTurkerPostsurveyResponseValid(TurkerPostsurveyResponse postsurveyResponse,
       BindingResult result, ModelMap model) {
-    return true; // TODO
+    // conflictExperienceType (checkbox) can be null
+    if (postsurveyResponse.getSharingExperience() == null
+        || postsurveyResponse.getConflictExperience() == null
+        || postsurveyResponse.getRelationshipImportance() == null
+        || postsurveyResponse.getSensitivityImportance() == null
+        || postsurveyResponse.getSentimentImportance() == null
+        || postsurveyResponse.getPreferenceImportance() == null
+        || postsurveyResponse.getArgumentImportance() == null
+        || postsurveyResponse.getNoPreferenceConfidence() == null
+        || postsurveyResponse.getPreferenceConfidence() == null
+        || postsurveyResponse.getPreferenceArgumentConfidence() == null) {
+      FieldError error = new FieldError(ATTR_POSTSURVEY_RESPONSE, "preferenceArgumentConfidence",
+          messageSource.getMessage("mandatory.answers", new String[] { "above" },
+              Locale.getDefault()));
+      result.addError(error);
+      return false;
+    }
+    return true;
   }
 }
