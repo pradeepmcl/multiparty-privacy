@@ -78,6 +78,8 @@ public class AppController {
   private static final int MTURK_ID_INVALID = 1;
   private static final int MTURK_ID_COMPLETED = 2;
   
+  private static final int MIN_JUSTIFICATION_LENGTH = 25;
+  
   private int nextBundleId = 1;
   
   private final RandomCodeGenerator randCodeGen = new RandomCodeGenerator(8);
@@ -347,7 +349,14 @@ public class AppController {
           messageSource.getMessage("mandatory.answer", null, Locale.getDefault()));
       result.addError(error);
       isValid = false;
+    } else if (picsurveyResponse.getPolicyJustification(_case).trim().length() < MIN_JUSTIFICATION_LENGTH) {
+      FieldError error = new FieldError(ATTR_PICTURESURVEY_RESPONSE, _case + "PolicyJustification",
+          messageSource.getMessage("short.answer", new String[] { "25 characters" },
+              Locale.getDefault()));
+      result.addError(error);
+      isValid = false;
     }
+
     return isValid;
   }
   
