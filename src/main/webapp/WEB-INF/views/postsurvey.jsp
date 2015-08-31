@@ -89,14 +89,25 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="sharingExperience"
-         value="yes" /> Yes
+         value="never" /> Never
         </label> 
        </div>
        <div class="radio">
         <label> <form:radiobutton path="sharingExperience"
-          value="no" /> No
+         value="few" /> A few times (1&ndash;5)
+        </label> 
+       </div>
+       <div class="radio">
+        <label> <form:radiobutton path="sharingExperience"
+          value="many" /> Many times (&gt;5)
         </label>
        </div>
+       <div class="radio"> 
+        <label> <form:radiobutton path="sharingExperience"
+          value="not_sure" /> Not sure
+        </label>
+       </div>
+       
       </div>
      </li>
 
@@ -106,12 +117,17 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="conflictExperience"
-          value="yes" /> Yes
+          value="never" /> Never
         </label> 
        </div>
        <div class="radio">
         <label> <form:radiobutton path="conflictExperience"
-          value="no" /> No
+          value="few" /> A few times (1&ndash;5)
+        </label>
+       </div>
+       <div class="radio">
+        <label> <form:radiobutton path="conflictExperience"
+          value="many" /> Many times (&gt;5)
         </label>
        </div>
        <div class="radio"> 
