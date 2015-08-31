@@ -94,34 +94,46 @@
     <ol>
      <li>
       <h3>How sensitive is the picture?</h3>
-       <label class="radio-inline"> 
-        <form:radiobutton path="imageSensitivity" value="sensitive" />
-        Not sensitive
+      <p>Scale: 1 (not sensitive at all) to 5 (extremely sensitive)</p>
+      <div class="form-group radio">
+       <label> 
+        <form:radiobutton path="imageSensitivity" value="1" /> 1
        </label> 
-       <label class="radio-inline"> 
-        <form:radiobutton path="imageSensitivity" value="somewhat_sensitive" /> 
-        Somewhat sensitive
+       <label> 
+        <form:radiobutton path="imageSensitivity" value="2" /> 2
        </label> 
-       <label class="radio-inline">
-        <form:radiobutton path="imageSensitivity" value="not_sensitive" />
-        Sensitive
+       <label> 
+        <form:radiobutton path="imageSensitivity" value="3" /> 3
+       </label> 
+       <label> 
+        <form:radiobutton path="imageSensitivity" value="4" /> 4
+       </label> 
+       <label> 
+        <form:radiobutton path="imageSensitivity" value="5" /> 5
        </label>
+      </div>
      </li>
      
      <li>
       <h3>What is the sentiment of the people in the picture?</h3>
-       <label class="radio-inline"> 
-        <form:radiobutton path="imageSentiment" value="positive" />
-        Positive
+      <p>Scale: 1 (extremely positive) to 5 (extremely negative)</p>
+      <div class="form-group radio">
+       <label> 
+        <form:radiobutton path="imageSentiment" value="1" /> 1
        </label> 
-       <label class="radio-inline"> 
-        <form:radiobutton path="imageSentiment" value="neutral" /> 
-        Neutral
+       <label> 
+        <form:radiobutton path="imageSentiment" value="2" /> 2
        </label> 
-       <label class="radio-inline">
-        <form:radiobutton path="imageSentiment" value="negative" />
-        Negative
+       <label> 
+        <form:radiobutton path="imageSentiment" value="3" /> 3
+       </label> 
+       <label> 
+        <form:radiobutton path="imageSentiment" value="4" /> 4
+       </label> 
+       <label> 
+        <form:radiobutton path="imageSentiment" value="5" /> 5
        </label>
+      </div>
      </li>
      
      <li>
