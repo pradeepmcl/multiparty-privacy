@@ -1,5 +1,8 @@
 package edu.ncsu.mas.platys.multiparty_privacy.dao;
 
+import java.math.BigInteger;
+
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import edu.ncsu.mas.platys.multiparty_privacy.model.TurkerPostsurveyResponse;
@@ -12,4 +15,9 @@ public class TurkerPostsurveyResponseDaoImpl extends AbstractDao<Integer, Turker
     persist(response);
   }
 
+  public long getResponseCount(String mturkId) {
+    Query query = getSession().createSQLQuery("select count(id) from turker_postsurvey_response "
+        + "where mturk_id = '" + mturkId + "'");
+    return ((BigInteger) query.uniqueResult()).longValue();
+  }
 }

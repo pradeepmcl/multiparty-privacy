@@ -53,7 +53,8 @@ public class AppController {
   private static final int MAX_SCENARIOS = 5;
   
   private static final String PAGE_SIGNIN = "signin";
-  private static final String PAGE_SIGNIN_FAILURE = "signin_failure"; // TODO
+  private static final String PAGE_SIGNIN_FAILURE = "signin_failure";
+  private static final String PAGE_REDIRECT_SIGNIN_FAILURE = "redirect:signin_failure";
   private static final String PAGE_PRESURVEY = "presurvey";
   private static final String PAGE_REDIRECT_PRESURVEY = "redirect:presurvey";
   private static final String PAGE_QUESTIONNAIRE = "questionnaire";
@@ -65,12 +66,17 @@ public class AppController {
   
   private static final String ATTR_TURKER = "turker";
   private static final String ATTR_MTURK_ID = "mturkId";
+  private static final String ATTR_SIGN_FAILURE_REASON = "signinFailureReason";
   private static final String ATTR_PRESURVEY_RESPONSE = "presurveyResponse";
   private static final String ATTR_PICTURESURVEY_RESPONSE = "picturesurveyResponse";
   private static final String ATTR_POSTSURVEY_RESPONSE = "postsurveyResponse";
   private static final String ATTR_SCENARIO = "scenario";
   private static final String ATTR_SCENARIO_BUNDLE_ID =  "scenarioBundleId";
   private static final String ATTR_COMPLETION_CODE =  "completionCode";
+  
+  private static final int MTURK_ID_VALID = 0;
+  private static final int MTURK_ID_INVALID = 1;
+  private static final int MTURK_ID_COMPLETED = 2;
   
   private int nextBundleId = 1;
   
@@ -85,12 +91,31 @@ public class AppController {
   @RequestMapping(value = { "/", "/" + PAGE_SIGNIN }, method = RequestMethod.POST)
   public String processSignIn(@ModelAttribute(ATTR_TURKER) Turker turker,
       final RedirectAttributes redirectAttributes) {
-    if (isMturkIDValid(turker.getMturkId())) {
-      redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, turker.getMturkId());
+    redirectAttributes.addFlashAttribute(ATTR_MTURK_ID, turker.getMturkId());
+    switch (isMturkIDValid(turker.getMturkId())) {
+    case MTURK_ID_VALID:
       return PAGE_REDIRECT_PRESURVEY;
-    } else {
-      return PAGE_SIGNIN_FAILURE;
+    case MTURK_ID_COMPLETED:
+      redirectAttributes.addFlashAttribute(ATTR_SIGN_FAILURE_REASON,
+          "You have already submitted a response in this batch "
+              + "(you can only submit one response per batch).");
+      return PAGE_REDIRECT_SIGNIN_FAILURE;
+    case MTURK_ID_INVALID:
+      redirectAttributes.addFlashAttribute(ATTR_SIGN_FAILURE_REASON, "Your MTurk ID is invalid.");
+      return PAGE_REDIRECT_SIGNIN_FAILURE;
+    default:
+      redirectAttributes.addFlashAttribute(ATTR_SIGN_FAILURE_REASON, "An unknown error occurred.");
+      return PAGE_REDIRECT_SIGNIN_FAILURE;
     }
+  }
+
+  @RequestMapping(value = { "/" + PAGE_SIGNIN_FAILURE }, method = RequestMethod.GET)
+  public String showSigninFailure(@ModelAttribute(ATTR_MTURK_ID) String mturkId,
+      @ModelAttribute(ATTR_SIGN_FAILURE_REASON) String signinFailureReason, BindingResult result,
+      ModelMap model) {
+    model.addAttribute(ATTR_MTURK_ID, mturkId);
+    model.addAttribute(ATTR_SIGN_FAILURE_REASON, signinFailureReason);
+    return PAGE_SIGNIN_FAILURE;
   }
 
   @RequestMapping(value = { "/" + PAGE_PRESURVEY }, method = RequestMethod.GET)
@@ -246,13 +271,18 @@ public class AppController {
    * }
    */
   
-  private boolean isMturkIDValid(String mturkID) {
-    if (mturkID != null && !mturkID.isEmpty()) {
-      // TODO: Check that the user does not exceed permitted number of HIT
-      // responses.
-      return true;
+  private int isMturkIDValid(String mturkID) {
+    // Could not find much information on the Mturk ID specification. The length
+    // 3 has been chosen intuitively.
+    if (mturkID == null || mturkID.trim().length() <= 3) {
+      return MTURK_ID_INVALID;
+    } else if (mturkID.equals("pmuruka") || mturkID.equals("rlopezf")) {
+      // Make exception for some IDs; we use these for testing
+      return MTURK_ID_VALID;
+    } else if (postsurveyResponseService.getResponseCount(mturkID) > 0) {
+      return MTURK_ID_COMPLETED;
     }
-    return false;
+    return MTURK_ID_VALID;
   }
 
   private boolean isTurkerPresurveyResponseValid(TurkerPresurveyResponse presurveyResponse,

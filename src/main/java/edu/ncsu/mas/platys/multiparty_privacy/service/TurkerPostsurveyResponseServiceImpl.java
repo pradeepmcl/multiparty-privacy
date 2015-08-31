@@ -18,5 +18,10 @@ public class TurkerPostsurveyResponseServiceImpl implements TurkerPostsurveyResp
   public void saveResponse(TurkerPostsurveyResponse response) {
     dao.saveResponse(response);
   }
+  
+  @Override
+  public long getResponseCount(String mturkId) {
+    return dao.getResponseCount(mturkId);
+  }
 
 }
