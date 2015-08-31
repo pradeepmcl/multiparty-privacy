@@ -33,10 +33,17 @@
    <label for="mturkId" class="sr-only"> Amazon Mechanical Turk
     ID</label>
    <form:input class="form-control" path="mturkId"
-    placeholder="Amazon Mechanical Turk ID" required="required"
+    placeholder="Amazon Mechanical Turk Worker ID" required="required"
     autofocus="autofocus" />
+
    <button class="btn btn-lg btn-primary btn-block" type="submit">
     Sign in</button>
+    
+   <p>
+    <br> <b>Note:</b> Your worker ID is not your name or email. You
+    can find it on your mechanical turk dashboard.
+   </p>
+
   </form:form>
  </div>
  <!-- /container -->
