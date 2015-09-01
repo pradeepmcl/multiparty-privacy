@@ -82,12 +82,15 @@
     <li>After submitting responses in a page, you <b>can not
       modify</b> your responses in that page.
     </li>
-    <li>If something goes wrong (does not happen often), please
-     start again from the beginning.</li>
     <li>Answering all questions is mandatory, unless explicitly
      marked as optional.</li>
-    <li>You must be <b>18 or older</b> to participate in the study.
+    <li>If something goes wrong (does not happen often), please
+     start again from the beginning. If the problem persists, please
+     contact <b>pmuruka AT ncsu.edu</b> with details of the problem.
     </li>
+    <li>This HIT may contain <b>adult content</b>. Worker discretion
+     is advised.</li>
+    <li>You must be <b>18 or older</b> to participate in the study.</li>
    </ul>
   </div>
 
