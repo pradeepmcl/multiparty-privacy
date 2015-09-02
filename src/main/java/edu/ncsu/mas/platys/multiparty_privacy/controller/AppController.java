@@ -290,7 +290,9 @@ public class AppController {
   private boolean isTurkerPresurveyResponseValid(TurkerPresurveyResponse presurveyResponse,
       BindingResult result, ModelMap model) {
     if (presurveyResponse.getGender() == null || presurveyResponse.getAge() == null
-        || presurveyResponse.getEducation() == null) {
+        || presurveyResponse.getEducation() == null
+        || presurveyResponse.getSocialmediaFrequency() == null
+        || presurveyResponse.getSharingFrequency() == null) {
       FieldError error = new FieldError(ATTR_PRESURVEY_RESPONSE, "education",
           messageSource.getMessage("mandatory.answers", new String[] { "above" },
               Locale.getDefault()));

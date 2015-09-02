@@ -113,3 +113,5 @@ CREATE TABLE turker_postsurvey_response (
   PRIMARY KEY (id),
   FOREIGN KEY (scenario_bundle_id) REFERENCES scenario_bundle(id)
 );
+
+ALTER TABLE turker_postsurvey_response ADD INDEX mturk_id (mturk_id);
