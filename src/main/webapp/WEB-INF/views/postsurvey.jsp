@@ -71,21 +71,20 @@
    <h3>Post-Study Survey</h3>
    <div class="jumbotron lead">
     <p>
-     <b>Multiparty privacy conflict</b> refers to a scenario in which a
-     user (sharer) shares information concerning multiple stakeholders
-     on social media, but one of the stakeholders involved in the
-     scenario is not satisfied with the privacy policy the sharer
-     applied for the information. Some of the scenarios we showed you
-     earlier may have involved conflicts. Imagine similar scenarios
-     (involving any type of information) to answer the following
-     questions.
+     We refer to a <b>privacy conflict</b> as a scenario in which a user
+     (sharer) shares information concerning multiple users (e.g., a
+     picture showing sharer and other users) on social media, but at
+     least one of the users involved in the scenario prefers a privacy
+     policy different from the one sharer applied for the information
+     shared. The scenarios we showed you earlier may have involved
+     privacy conflicts. Imagine similar scenarios to answer the
+     following questions.
     </p>
 
     <ol>
      <li>
       <h3>Have you ever shared information concerning multiple
-       stakeholders on social media (e.g., a picture showing you and
-       others)?</h3>
+       users on social media?</h3>
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="sharingExperience"
@@ -112,8 +111,7 @@
      </li>
 
      <li>
-      <h3>Have you ever been involved in a multiparty privacy
-       conflict?</h3>
+      <h3>Have you ever been involved in a privacy conflict?</h3>
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="conflictExperience"
@@ -139,21 +137,21 @@
      </li>
 
      <li>
-      <h3>If you were involved in a multiparty privacy conflict,
-       how did the conflict start?</h3>
+      <h3>If you were involved in a privacy conflict, how did the
+       conflict start?</h3>
       <p>Note: Choose both if you were involved in both such
        conflicts; neither if you were not involved in a conflict.</p>
       <div class="form-horizontal">
        <div class="checkbox">
         <label> <form:checkbox
           path="conflictExperienceTypeArray" value="self" /> I shared
-         information concerning another user, which led to a conflict
+         information concerning another user and that led to a conflict
         </label>
        </div>
        <div class="checkbox">
         <label> <form:checkbox
           path="conflictExperienceTypeArray" value="other" /> Some user
-         shared information concerning me, which led to a conflict
+         shared information concerning me and that led to a conflict
         </label>
        </div>
       </div> 
@@ -162,19 +160,17 @@
      <li>
       <h3>How important do you think the following factors are in
        choosing an appropriate privacy policy for sharing information
-       concerning multiple stakeholders on social media?</h3>
+       concerning multiple users on social media?</h3>
       <p>Scale: 1 (not important at all) to 5 (extremely important)</p>
-      <p>Note: Here, a preference refers to a stakeholders preferred
-       privacy policy and an argument refers to the stakeholder's
-       justification for the corresponding preference. An appropriate
-       privacy policy is one on which all stakeholders (including the
-       sharer) are likely to agree on.</p>
+      <p>Note: An appropriate privacy policy is one which all
+       users (including the sharer) are likely to agree on.</p>
+
       <div class="form-horizontal">
        <c:set var="factor"
-        value="${fn:split('relationshipImportance,sensitivityImportance,sentimentImportance,preferenceImportance,argumentImportance', ',')}" />
+        value="${fn:split('relationshipImportance,sensitivityImportance,sentimentImportance', ',')}" />
 
        <c:set var="factorDesc"
-        value="${fn:split('<b>Relationship</b> between stakeholders,<b>Sensitivity</b> of the information shared,<b>Sentiment</b> of the information shared,<b>Preferences</b> of the stakeholders,<b>Arguments</b> by the stakeholders', ',')}" />
+        value="${fn:split('<b>Relationship</b> between stakeholders,<b>Sensitivity</b> of the information shared,<b>Sentiment</b> of the information shared', ',')}" />
 
        <c:forEach items="${factor}" var="factor" varStatus="loop">
         <div class="form-group radio">
@@ -202,8 +198,12 @@
      <li>
       <h3>How confident will you be in choosing an appropriate
        privacy policy for sharing information concerning multiple
-       stakeholders on social media in the following cases?</h3>
+       users on social media in the following cases?</h3>
       <p>Scale: 1 (not confident at all) to 5 (extremely confident)</p>
+      <p>Note: Here, a preference refers to a user's preferred
+       privacy policy and an argument refers to the user's justification
+       for the corresponding preference.</p>
+
       <div class="form-horizontal">
        <c:set var="factor"
         value="${fn:split('noPreferenceConfidence,preferenceConfidence,preferenceArgumentConfidence', ',')}" />

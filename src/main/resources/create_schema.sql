@@ -104,8 +104,6 @@ CREATE TABLE turker_postsurvey_response (
   relationship_importance VARCHAR(20) NOT NULL,
   sensitivity_importance VARCHAR(20) NOT NULL,
   sentiment_importance VARCHAR(20) NOT NULL,
-  preference_importance VARCHAR(20) NOT NULL,
-  argument_importance VARCHAR(20) NOT NULL,
   no_preference_confidence VARCHAR(20) NOT NULL,
   preference_confidence VARCHAR(20) NOT NULL,
   preference_argument_confidence VARCHAR(20) NOT NULL,

@@ -63,14 +63,6 @@ public class TurkerPostsurveyResponse {
   @NotNull
   @Column(name = "sentiment_importance", nullable = false)
   private String sentimentImportance;
-
-  @NotNull
-  @Column(name = "preference_importance", nullable = false)
-  private String preferenceImportance;
-
-  @NotNull
-  @Column(name = "argument_importance", nullable = false)
-  private String argumentImportance;
   
   @NotNull
   @Column(name = "no_preference_confidence", nullable = false)
@@ -174,22 +166,6 @@ public class TurkerPostsurveyResponse {
 
   public void setConflictExperienceTypeArray(String[] conflictExperienceTypeArray) {
     this.conflictExperienceTypeArray = conflictExperienceTypeArray;
-  }
-
-  public String getPreferenceImportance() {
-    return preferenceImportance;
-  }
-
-  public void setPreferenceImportance(String preferenceImportance) {
-    this.preferenceImportance = preferenceImportance;
-  }
-
-  public String getArgumentImportance() {
-    return argumentImportance;
-  }
-
-  public void setArgumentImportance(String argumentImportance) {
-    this.argumentImportance = argumentImportance;
   }
 
   public String getNoPreferenceConfidence() {
