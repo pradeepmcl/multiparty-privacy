@@ -77,7 +77,18 @@ public class TurkerPicturesurveyResponse {
   @NotBlank
   @Column(name = "case2_policy_justification", nullable = false)
   private String case2PolicyJustification;
+
+  @NotBlank
+  @Column(name = "case3_policy", nullable = false)
+  private String case3Policy;
   
+  @Column(name = "case3_policy_other")
+  private String case3PolicyOther;
+    
+  @NotBlank
+  @Column(name = "case3_policy_justification", nullable = false)
+  private String case3PolicyJustification;
+
   @Transient
   private int scenarioBundleIndex;
   
@@ -204,6 +215,30 @@ public class TurkerPicturesurveyResponse {
     this.case2PolicyJustification = case2PolicyJustification;
   }
   
+  public String getCase3Policy() {
+    return case3Policy;
+  }
+
+  public void setCase3Policy(String case3Policy) {
+    this.case3Policy = case3Policy;
+  }
+
+  public String getCase3PolicyOther() {
+    return case3PolicyOther;
+  }
+
+  public void setCase3PolicyOther(String case3PolicyOther) {
+    this.case3PolicyOther = case3PolicyOther;
+  }
+
+  public String getCase3PolicyJustification() {
+    return case3PolicyJustification;
+  }
+
+  public void setCase3PolicyJustification(String case3PolicyJustification) {
+    this.case3PolicyJustification = case3PolicyJustification;
+  }
+
   public String getScenariosCsv() {
     return scenariosCsv;
   }
@@ -225,6 +260,8 @@ public class TurkerPicturesurveyResponse {
       return case1Policy;
     } else if (_case.equals("case2")) {
       return case2Policy;
+    } else if (_case.equals("case3")) {
+      return case3Policy;
     } else {
       throw new IllegalArgumentException("No such case as " + _case);
     }
@@ -235,6 +272,8 @@ public class TurkerPicturesurveyResponse {
       return case1PolicyOther;
     } else if (_case.equals("case2")) {
       return case2PolicyOther;
+    } else if (_case.equals("case3")) {
+      return case3PolicyOther;
     } else {
       throw new IllegalArgumentException("No such case as " + _case);
     }
@@ -245,6 +284,8 @@ public class TurkerPicturesurveyResponse {
       return case1PolicyJustification;
     } else if (_case.equals("case2")) {
       return case2PolicyJustification;
+    } else if (_case.equals("case3")) {
+      return case3PolicyJustification;
     } else {
       throw new IllegalArgumentException("No such case as " + _case);
     }
@@ -261,6 +302,9 @@ public class TurkerPicturesurveyResponse {
     case2Policy = null;
     case2PolicyOther = null;
     case2PolicyJustification = null;
+    case3Policy = null;
+    case3PolicyOther = null;
+    case3PolicyJustification = null;
   }
   
   @Override

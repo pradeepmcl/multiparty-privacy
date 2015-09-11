@@ -88,6 +88,9 @@ CREATE TABLE turker_picturesurvey_response (
   case2_policy VARCHAR(20) NOT NULL,
   case2_policy_other VARCHAR(500),
   case2_policy_justification VARCHAR(2000) NOT NULL,
+  case3_policy VARCHAR(20) NOT NULL,
+  case3_policy_other VARCHAR(500),
+  case3_policy_justification VARCHAR(2000) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (scenario_bundle_id) REFERENCES scenario_bundle(id),
   FOREIGN KEY (scenario_id) REFERENCES scenario(id)

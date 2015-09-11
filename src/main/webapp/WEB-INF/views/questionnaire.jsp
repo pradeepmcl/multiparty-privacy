@@ -68,7 +68,7 @@
 
   <h3>Task</h3>
   <div class="jumbotron lead">
-   <p>Read the picture and its description below and answer three
+   <p>Read the picture and its description below and answer four
     questionnaires that follow. Please answer the questionnaires sequentially.</p>
   </div>
 
@@ -229,20 +229,20 @@
      </li>
     </ol>
    </div>
-      
+
    <h3>Questions about sharing scenario 2</h3>
    <div class="jumbotron lead">
-    <p>Imagine that ${scenario.image.sharingDescription} Now, unlike
-     the scenario above, ${stakeholders[0]}, ${stakeholders[1]}, and
-     ${stakeholders[2]} discuss an appropriate privacy policy for the
-     picture. The following are their views.</p>
+    <p>Again, imagine that ${scenario.image.sharingDescription} Now,
+     unlike the scenario above, ${stakeholders[0]}, ${stakeholders[1]},
+     and ${stakeholders[2]} express their preferred privacy policy for
+     the picture as follows.</p>
     <ul class="list-group">
      <li class="list-group-item"><b>${stakeholders[0]}: </b>
-      ${scenario.argumentA.description} ${scenario.policyA.description}</li>
+      ${scenario.policyA.description}</li>
      <li class="list-group-item"><b>${stakeholders[1]}: </b>
-      ${scenario.argumentB.description} ${scenario.policyB.description}</li>
+      ${scenario.policyB.description}</li>
      <li class="list-group-item"><b>${stakeholders[2]}: </b>
-      ${scenario.argumentC.description} ${scenario.policyC.description}</li>       
+      ${scenario.policyC.description}</li>       
     </ul>
      
     <ol>
@@ -293,6 +293,74 @@
        placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
       <div class="has-error">
        <form:errors path="case2PolicyJustification" class="help-inline" />
+      </div>
+     </li>
+    </ol>
+   </div>
+      
+   <h3>Questions about sharing scenario 3</h3>
+   <div class="jumbotron lead">
+    <p>Again, imagine that ${scenario.image.sharingDescription} Now,
+     unlike the scenario above, ${stakeholders[0]}, ${stakeholders[1]},
+     and ${stakeholders[2]} not only express a preffered privacy policy,
+     but also provide a justification for their preference as follows.</p>
+    <ul class="list-group">
+     <li class="list-group-item"><b>${stakeholders[0]}: </b>
+      ${scenario.argumentA.description} ${scenario.policyA.description}</li>
+     <li class="list-group-item"><b>${stakeholders[1]}: </b>
+      ${scenario.argumentB.description} ${scenario.policyB.description}</li>
+     <li class="list-group-item"><b>${stakeholders[2]}: </b>
+      ${scenario.argumentC.description} ${scenario.policyC.description}</li>       
+    </ul>
+     
+    <ol>
+     <li>
+      <h3>What privacy policy do you think ${scenario.image.sharer}
+       should apply to the picture?</h3>
+      <div class="form-horizontal">
+       <div class="radio">
+        <label> <form:radiobutton path="case3Policy" value="a" />
+         Share with all (anyone on or off social media can see the
+         picture).
+        </label>
+       </div>
+       <div class="radio">
+        <label> <form:radiobutton path="case3Policy" value="b" />
+         Share with common friends (only common friends of
+         ${stakeholders[0]}, ${stakeholders[1]}, and ${stakeholders[2]}
+         can see the picture).
+        </label>
+       </div>
+       <div class="radio">
+        <label> <form:radiobutton path="case3Policy" value="c" />
+         Share among themselves (only ${stakeholders[0]},
+         ${stakeholders[1]}, and ${stakeholders[2]} can see the picture)
+        </label>
+       </div>
+       <div class="form-group">
+        <div class="col-sm-3 radio">
+         <label> <form:radiobutton path="case3Policy" value="other" />
+          Other policy:
+         </label>
+        </div>
+        <div class="col-sm-9">
+         <form:input type="text" path="case3PolicyOther" class="form-control"
+          placeholder="Enter the other policy" />
+        </div>
+       </div>
+       <div class="has-error">
+        <form:errors path="case3Policy" class="help-inline" />
+        <form:errors path="case3PolicyOther" class="help-inline" />
+       </div>
+      </div>
+     </li>
+
+     <li>
+      <h3>Why did you choose the above policy?</h3> <form:textarea
+       path="case3PolicyJustification" class="form-control" rows="3"
+       placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
+      <div class="has-error">
+       <form:errors path="case3PolicyJustification" class="help-inline" />
       </div>
      </li>
     </ol>

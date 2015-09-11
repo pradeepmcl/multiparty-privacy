@@ -216,7 +216,8 @@ public class AppController {
     return PAGE_POSTSURVEY;
   }
     
-  @RequestMapping(value = { "/" + PAGE_POSTSURVEY }, method = RequestMethod.POST)
+  // TODO Remove /test-postsurvey
+  @RequestMapping(value = { "/" + PAGE_POSTSURVEY, "/test-postsurvey" }, method = RequestMethod.POST)
   public String processPostsurveyResponse(
       @ModelAttribute(ATTR_POSTSURVEY_RESPONSE) TurkerPostsurveyResponse postsurveyResponse,
       BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
@@ -256,6 +257,16 @@ public class AppController {
     return PAGE_SUCCESS;
   }
 
+  // TODO: This method is for testing only
+  @RequestMapping(value = { "/test-postsurvey" }, method = RequestMethod.GET)
+  public String showPostsurveyForTesting(ModelMap model) {
+    TurkerPostsurveyResponse postsurveyResponse = new TurkerPostsurveyResponse();
+    postsurveyResponse.setMturkId("TestingID");
+    postsurveyResponse.setScenarioBundleId(1);
+    model.addAttribute(ATTR_POSTSURVEY_RESPONSE, postsurveyResponse);
+    return PAGE_POSTSURVEY;
+  }
+  
   private ScenarioBundle getScenarioBundle() {
     long numBundles = scenarioBundleService.getCount();
     if (nextBundleId > numBundles) {
@@ -309,6 +320,7 @@ public class AppController {
     isValid = validateTurkerResponseForImageQuestions(picsurveyResponse, result, isValid);
     isValid = validateTurkerResponseForCase(picsurveyResponse, result, "case1", isValid);
     isValid = validateTurkerResponseForCase(picsurveyResponse, result, "case2", isValid);
+    isValid = validateTurkerResponseForCase(picsurveyResponse, result, "case3", isValid);
 
     return isValid;
   }
@@ -370,8 +382,6 @@ public class AppController {
         || postsurveyResponse.getRelationshipImportance() == null
         || postsurveyResponse.getSensitivityImportance() == null
         || postsurveyResponse.getSentimentImportance() == null
-        || postsurveyResponse.getPreferenceImportance() == null
-        || postsurveyResponse.getArgumentImportance() == null
         || postsurveyResponse.getNoPreferenceConfidence() == null
         || postsurveyResponse.getPreferenceConfidence() == null
         || postsurveyResponse.getPreferenceArgumentConfidence() == null) {
