@@ -76,6 +76,15 @@ public class TurkerPostsurveyResponse {
   @Column(name = "preference_argument_confidence", nullable = false)
   private String preferenceArgumentConfidence;
   
+  @Column(name = "additional_attributes")
+  private String additionalAttributes;
+
+  @Column(name = "email")
+  private String email;
+
+  @Column(name = "other_comments")
+  private String otherComments;
+
   @NotNull
   @Column(name = "completion_code")
   private String completionCode;
@@ -190,6 +199,30 @@ public class TurkerPostsurveyResponse {
 
   public void setPreferenceArgumentConfidence(String preferenceArgumentConfidence) {
     this.preferenceArgumentConfidence = preferenceArgumentConfidence;
+  }
+
+  public String getAdditionalAttributes() {
+    return additionalAttributes;
+  }
+
+  public void setAdditionalAttributes(String additionalAttributes) {
+    this.additionalAttributes = additionalAttributes;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getOtherComments() {
+    return otherComments;
+  }
+
+  public void setOtherComments(String otherComments) {
+    this.otherComments = otherComments;
   }
 
   public String getCompletionCode() {

@@ -209,7 +209,7 @@
         value="${fn:split('noPreferenceConfidence,preferenceConfidence,preferenceArgumentConfidence', ',')}" />
 
        <c:set var="factorDesc"
-        value="${fn:split('You <b>do not know</b> stakeholders preferences or arguments;You know stakeholders <b>prefernces</b>, but not their arguments;You know stakeholders <b>prefernces</b> and <b>arguments</b>', ';')}" />
+        value="${fn:split('You <b>do not know</b> stakeholders preferences or arguments;You know users <b>preferences</b>, but not their arguments;You know users <b>preferences</b> and <b>arguments</b>', ';')}" />
 
        <c:forEach items="${factor}" var="factor" varStatus="loop">
        <div class="form-group radio">
@@ -233,6 +233,32 @@
        </c:forEach>             
       </div>
      </li>
+     
+     <li>
+      <h3>Apart from the attributes above (relationship,
+       sensitivity, sentiment, preferences, and arguments), what other
+       attributes do you think can help in deciding an appropriate
+       privacy policy to resolve a privacy conflict?</h3> 
+      <form:textarea
+       path="additionalAttributes" class="form-control" rows="3"
+       placeholder="Additional attributes (optional)" />
+     </li>
+     
+     <li>
+      <h3>We may conduct additional studies on MTurk as follow-ups
+       to this study. If you want to be notified when we post such
+       studies, please provide your email below.</h3> 
+       <form:input type="text" path="email" class="form-control"
+       placeholder="Email (optional)" />
+     </li>
+     
+     <li>
+      <h3>Do you have any other comments about the study?</h3> 
+       <form:textarea
+       path="otherComments" class="form-control" rows="3"
+       placeholder="Other comments (optional)" />
+     </li>
+     
     </ol>
     
     <div class="has-error">
