@@ -246,7 +246,7 @@
    <div class="jumbotron lead">
     <p>Again, imagine that ${scenario.image.sharingDescription} 
      Now, unlike the scenario above, ${stakeholders[0]}, ${stakeholders[1]},
-     and ${stakeholders[2]} express their preferred privacy policy for
+     and ${stakeholders[2]} express their preferences for sharing
      the picture as follows.</p>
     <ul class="list-group">
      <li class="list-group-item"><b>${stakeholders[0]}: </b>
@@ -320,7 +320,7 @@
    <div class="jumbotron lead">
     <p>Again, imagine that ${scenario.image.sharingDescription} Now,
      unlike the scenario above, ${stakeholders[0]}, ${stakeholders[1]},
-     and ${stakeholders[2]} not only express a preferred privacy policy,
+     and ${stakeholders[2]} not only express a preference for sharing,
      but also provide a justification for their preference as follows.</p>
     <ul class="list-group">
      <li class="list-group-item"><b>${stakeholders[0]}: </b>
