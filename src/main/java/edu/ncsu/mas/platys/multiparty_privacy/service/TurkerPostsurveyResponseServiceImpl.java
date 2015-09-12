@@ -23,5 +23,10 @@ public class TurkerPostsurveyResponseServiceImpl implements TurkerPostsurveyResp
   public long getResponseCount(String mturkId) {
     return dao.getResponseCount(mturkId);
   }
+  
+  @Override
+  public long getMaxBundleId() {
+    return dao.getMaxBundleId();
+  }
 
 }

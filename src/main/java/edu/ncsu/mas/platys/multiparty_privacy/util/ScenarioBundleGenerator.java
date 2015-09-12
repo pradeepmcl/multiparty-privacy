@@ -27,7 +27,7 @@ import java.util.TreeSet;
  */
 public class ScenarioBundleGenerator {
   
-  private static final int NUM_IMAGES = 9;
+  private static final int NUM_IMAGES = 12;
   private static final int NUM_POLICY_ARGS_COMBINATIONS = 180; // 6 * 6 * 5
   private static final int NUM_SCENARIOS_BUNDLE = 5;
   

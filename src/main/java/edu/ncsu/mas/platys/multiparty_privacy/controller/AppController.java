@@ -80,10 +80,10 @@ public class AppController {
   
   private static final int MIN_JUSTIFICATION_LENGTH = 25;
   
-  private int nextBundleId = 1;
+  private int nextBundleId = 0;
   
   private final RandomCodeGenerator randCodeGen = new RandomCodeGenerator(8);
-
+  
   @RequestMapping(value = { "/", "/" + PAGE_SIGNIN }, method = RequestMethod.GET)
   public String showSignIn(ModelMap model) {
     model.addAttribute(ATTR_TURKER, new Turker());
@@ -268,10 +268,15 @@ public class AppController {
   }
   
   private ScenarioBundle getScenarioBundle() {
+    if (nextBundleId == 0) {
+      nextBundleId = (int) postsurveyResponseService.getMaxBundleId() + 1;
+    }
+    
     long numBundles = scenarioBundleService.getCount();
     if (nextBundleId > numBundles) {
       nextBundleId = 1;
     }
+    
     return scenarioBundleService.findById(nextBundleId++);
   }
 
