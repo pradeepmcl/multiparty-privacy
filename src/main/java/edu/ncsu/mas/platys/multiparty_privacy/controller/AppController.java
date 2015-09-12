@@ -99,8 +99,8 @@ public class AppController {
       return PAGE_REDIRECT_PRESURVEY;
     case MTURK_ID_COMPLETED:
       redirectAttributes.addFlashAttribute(ATTR_SIGN_FAILURE_REASON,
-          "You have already submitted a response in this batch "
-              + "(you can only submit one response per batch).");
+          "You can only submit one response to this survey; "
+          + "you have already submitted a response to this survey in this or a previous batch.");
       return PAGE_REDIRECT_SIGNIN_FAILURE;
     case MTURK_ID_INVALID:
       redirectAttributes.addFlashAttribute(ATTR_SIGN_FAILURE_REASON, "Your MTurk ID is invalid.");
