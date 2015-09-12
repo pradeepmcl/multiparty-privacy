@@ -370,7 +370,7 @@ public class AppController {
       isValid = false;
     } else if (picsurveyResponse.getPolicyJustification(_case).trim().length() < MIN_JUSTIFICATION_LENGTH) {
       FieldError error = new FieldError(ATTR_PICTURESURVEY_RESPONSE, _case + "PolicyJustification",
-          messageSource.getMessage("short.answer", new String[] { "25 characters" },
+          messageSource.getMessage("short.answer", new String[] { "25 or more characters" },
               Locale.getDefault()));
       result.addError(error);
       isValid = false;

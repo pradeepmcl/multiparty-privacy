@@ -68,8 +68,12 @@
 
   <h3>Task</h3>
   <div class="jumbotron lead">
-   <p>Read the picture and its description below and answer four
-    questionnaires that follow. Please answer the questionnaires sequentially.</p>
+   <p>Examine the picture and its description below and answer the four
+    questionnaires that follow, <b>sequentially</b>. Please ignore the 
+    resemblance (or lack of resemblance) of this scenario to other scenarios 
+    in which you might  have seen this picture. That is, answer each 
+    questionnaire, considering only the information in that questionnaire, 
+    and the questionnaires and description preceding it in this page.</p>
   </div>
 
   <h3>Picture and description</h3>
@@ -156,12 +160,20 @@
      <li>
       <h3>How many people are in the picture?</h3> 
        <label class="radio-inline"> 
+        <form:radiobutton path="imagePeopleCount" value="two" />
+        Two
+       </label>
+       <label class="radio-inline"> 
         <form:radiobutton path="imagePeopleCount" value="three" />
         Three
-       </label> 
+       </label>
        <label class="radio-inline"> 
-        <form:radiobutton path="imagePeopleCount" value="five" /> 
-        Five
+        <form:radiobutton path="imagePeopleCount" value="four" />
+        Four
+       </label>
+       <label class="radio-inline"> 
+        <form:radiobutton path="imagePeopleCount" value="five_to_nine" /> 
+        More than four, but less than ten
        </label> 
        <label class="radio-inline">
         <form:radiobutton path="imagePeopleCount" value="ten_plus" />
@@ -184,21 +196,17 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="case1Policy" value="a" />
-         Share with all (anyone on or off social media can see the
-         picture).
+         <%= getDescription("all", (String[]) pageContext.getAttribute("stakeholders")) %>
         </label>
        </div>
        <div class="radio">
         <label> <form:radiobutton path="case1Policy" value="b" />
-         Share with common friends (only common friends of
-         ${stakeholders[0]}, ${stakeholders[1]}, and ${stakeholders[2]}
-         can see the picture).
+         <%= getDescription("common", (String[]) pageContext.getAttribute("stakeholders")) %>
         </label>
        </div>
        <div class="radio">
         <label> <form:radiobutton path="case1Policy" value="c" />
-         Share among themselves (only ${stakeholders[0]},
-         ${stakeholders[1]}, and ${stakeholders[2]} can see the picture)
+         <%= getDescription("self", (String[]) pageContext.getAttribute("stakeholders")) %>
         </label>
        </div>
        <div class="form-group">
@@ -230,19 +238,29 @@
     </ol>
    </div>
 
+   <c:set var="policyAName" value="${scenario.policyA.name}"/>
+   <c:set var="policyBName" value="${scenario.policyB.name}"/>
+   <c:set var="policyCName" value="${scenario.policyC.name}"/>
+   
    <h3>Questions about sharing scenario 2</h3>
    <div class="jumbotron lead">
-    <p>Again, imagine that ${scenario.image.sharingDescription} Now,
-     unlike the scenario above, ${stakeholders[0]}, ${stakeholders[1]},
+    <p>Again, imagine that ${scenario.image.sharingDescription} 
+     Now, unlike the scenario above, ${stakeholders[0]}, ${stakeholders[1]},
      and ${stakeholders[2]} express their preferred privacy policy for
      the picture as follows.</p>
     <ul class="list-group">
      <li class="list-group-item"><b>${stakeholders[0]}: </b>
-      ${scenario.policyA.description}</li>
+      <%=getEgoDescription((String) pageContext.getAttribute("policyAName"),
+             (String[]) pageContext.getAttribute("stakeholders"))%>
+		 </li>
      <li class="list-group-item"><b>${stakeholders[1]}: </b>
-      ${scenario.policyB.description}</li>
+      <%=getEgoDescription((String) pageContext.getAttribute("policyBName"),
+             (String[]) pageContext.getAttribute("stakeholders"))%>
+     </li>
      <li class="list-group-item"><b>${stakeholders[2]}: </b>
-      ${scenario.policyC.description}</li>       
+      <%=getEgoDescription((String) pageContext.getAttribute("policyCName"),
+             (String[]) pageContext.getAttribute("stakeholders"))%>
+     </li>       
     </ul>
      
     <ol>
@@ -302,15 +320,24 @@
    <div class="jumbotron lead">
     <p>Again, imagine that ${scenario.image.sharingDescription} Now,
      unlike the scenario above, ${stakeholders[0]}, ${stakeholders[1]},
-     and ${stakeholders[2]} not only express a preffered privacy policy,
+     and ${stakeholders[2]} not only express a preferred privacy policy,
      but also provide a justification for their preference as follows.</p>
     <ul class="list-group">
      <li class="list-group-item"><b>${stakeholders[0]}: </b>
-      ${scenario.argumentA.description} ${scenario.policyA.description}</li>
+      ${scenario.argumentA.description} 
+      <%=getEgoDescription((String) pageContext.getAttribute("policyAName"),
+             (String[]) pageContext.getAttribute("stakeholders"))%>
+     </li>
      <li class="list-group-item"><b>${stakeholders[1]}: </b>
-      ${scenario.argumentB.description} ${scenario.policyB.description}</li>
+      ${scenario.argumentB.description} 
+      <%=getEgoDescription((String) pageContext.getAttribute("policyBName"),
+             (String[]) pageContext.getAttribute("stakeholders"))%>
+     </li>
      <li class="list-group-item"><b>${stakeholders[2]}: </b>
-      ${scenario.argumentC.description} ${scenario.policyC.description}</li>       
+      ${scenario.argumentC.description} 
+      <%=getEgoDescription((String) pageContext.getAttribute("policyCName"),
+             (String[]) pageContext.getAttribute("stakeholders"))%>
+     </li>       
     </ul>
      
     <ol>
@@ -393,5 +420,34 @@
     $('form').submit();
   });
  </script>
+ 
+ <%!
+ public String getDescription(String policy, String[] stakeholders) {
+   if (policy.equals("all")) {
+     return "Share with all (anyone on or off social media can see the picture)";
+   } else if (policy.equals("common")) {
+      return "Share with common friends (only common friends of " + stakeholders[0] + ", "
+          + stakeholders[1] + ", and " + stakeholders[2] + " can see the picture)";
+    } else if (policy.equals("self")) {
+      return "Share among themselves (only " + stakeholders[0] + ", " + stakeholders[1] + ", and "
+          + stakeholders[2] + " can see the picture)";
+    }
+    return "invalid policy";
+  }
+ 
+ public String getEgoDescription(String policy, String[] stakeholders) {
+   if (policy.equals("all")) {
+     return "Share with all (anyone on or off social media can see the picture)";
+   } else if (policy.equals("common")) {
+      return "Share with our common friends (only common friends of " + stakeholders[0] + ", "
+          + stakeholders[1] + ", and " + stakeholders[2] + " can see the picture)";
+    } else if (policy.equals("self")) {
+      return "Share among ourselves (only " + stakeholders[0] + ", " + stakeholders[1] + ", and "
+          + stakeholders[2] + " can see the picture)";
+    }
+    return "invalid policy";
+  }
+  %>
+  
 </body>
 </html>

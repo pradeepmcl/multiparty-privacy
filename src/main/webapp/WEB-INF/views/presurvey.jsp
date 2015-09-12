@@ -79,10 +79,10 @@
     <li>Use the <b>Submit Responses</b> button at the end of the
      page to proceed to the next page.
     </li>
-    <li>After submitting responses in a page, you <b>can not
-      modify</b> your responses in that page.
-    </li>
-    <li>Answering all questions is mandatory, unless explicitly
+	  <li>After submitting responses in a page, you <b>cannot modify</b> 
+	   your responses in that page.
+		</li>
+		<li>Answering all questions is mandatory, unless explicitly
      marked as optional.</li>
     <li>If something goes wrong (does not happen often), please
      start again from the beginning. If the problem persists, please
@@ -199,7 +199,7 @@
      
      <li>
       <h3>How often do you use social media (e.g., Facebook, Google
-       Plus, Twitter, etc.)?</h3>
+       Plus, Flickr, Twitter, LinkedIn)?</h3>
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="socialmediaFrequency" value="daily" />
@@ -217,7 +217,7 @@
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="socialmediaFrequency" value="monthly" />
-         About once a month
+         About once a month or less often than that
         </label>
        </div>
       </div>      
@@ -231,8 +231,8 @@
      </li>
      
      <li>
-      <h3>How many pictures showing you and others have you shared
-       online (e.g., on Facebook, Flickr, email, etc.)?</h3>
+      <h3>How many pictures showing you and others have you ever shared
+       via social media or email?</h3>
       <div class="form-horizontal">
        <div class="radio">
         <label> <form:radiobutton path="sharingFrequency" value="several" />
