@@ -186,6 +186,8 @@
     </div>
    </div>
    
+   <c:set var="justificationHint" value="Enter a justification as to why you think the above policy is appropriate for this scenario. Please provide as much detail as you can. You must enter at least a sentence (25 characters or longer)." />
+   
    <h3>Questions about sharing scenario 1</h3>
    <div class="jumbotron lead">
     <p>Imagine that ${scenario.image.sharingDescription}</p>
@@ -230,7 +232,7 @@
      <li>
       <h3>Why did you choose the above policy?</h3> <form:textarea
        path="case1PolicyJustification" class="form-control" rows="3"
-       placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
+       placeholder="${justificationHint}" />
       <div class="has-error">
        <form:errors path="case1PolicyJustification" class="help-inline" />
       </div>
@@ -308,7 +310,7 @@
      <li>
       <h3>Why did you choose the above policy?</h3> <form:textarea
        path="case2PolicyJustification" class="form-control" rows="3"
-       placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
+       placeholder="${justificationHint}" />
       <div class="has-error">
        <form:errors path="case2PolicyJustification" class="help-inline" />
       </div>
@@ -385,7 +387,7 @@
      <li>
       <h3>Why did you choose the above policy?</h3> <form:textarea
        path="case3PolicyJustification" class="form-control" rows="3"
-       placeholder="Enter a justification as to why you think the above policy is appropriate for the given picture and context" />
+       placeholder="${justificationHint}" />
       <div class="has-error">
        <form:errors path="case3PolicyJustification" class="help-inline" />
       </div>
