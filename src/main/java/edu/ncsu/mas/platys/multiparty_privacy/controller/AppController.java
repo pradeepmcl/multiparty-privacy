@@ -1,10 +1,14 @@
 package edu.ncsu.mas.platys.multiparty_privacy.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Locale;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -29,6 +33,7 @@ import edu.ncsu.mas.platys.multiparty_privacy.util.RandomCodeGenerator;
 
 @Controller
 @RequestMapping("/")
+@PropertySource("classpath:application.properties")
 public class AppController {
 
   @Autowired
@@ -48,6 +53,9 @@ public class AppController {
   
   @Autowired
   MessageSource messageSource;
+  
+  @Autowired
+  private Environment env;
 
   // Changing this variable requires that the db be updated accordingly
   private static final int MAX_SCENARIOS = 5;
@@ -147,7 +155,7 @@ public class AppController {
 
   @RequestMapping(value = { "/" + PAGE_QUESTIONNAIRE }, method = RequestMethod.GET)
   public String showQuestionnaire(@ModelAttribute(ATTR_MTURK_ID) String mturkId,
-      BindingResult result, ModelMap model) {
+      BindingResult result, ModelMap model) throws FileNotFoundException, IOException {
     ScenarioBundle bundle = getScenarioBundle();
     String[] scenarios = bundle.getScenariosCsv().split(",");
     int scenarioId = Integer.parseInt(scenarios[0]);
@@ -267,9 +275,10 @@ public class AppController {
     return PAGE_POSTSURVEY;
   }
   
-  private ScenarioBundle getScenarioBundle() {
+  private ScenarioBundle getScenarioBundle() throws FileNotFoundException, IOException {
     if (nextBundleId == 0) {
-      nextBundleId = (int) postsurveyResponseService.getMaxBundleId() + 1;
+      nextBundleId = (int) postsurveyResponseService
+          .getMaxBundleId(Integer.parseInt(env.getProperty("db.batch.start.id"))) + 1;
     }
     
     long numBundles = scenarioBundleService.getCount();
@@ -277,6 +286,7 @@ public class AppController {
       nextBundleId = 1;
     }
     
+    System.out.println("Next bundle ID: " + nextBundleId); // TODO: Comment
     return scenarioBundleService.findById(nextBundleId++);
   }
 
