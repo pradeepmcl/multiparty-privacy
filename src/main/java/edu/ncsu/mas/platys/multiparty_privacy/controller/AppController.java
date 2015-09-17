@@ -16,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.ncsu.mas.platys.multiparty_privacy.model.Scenario;
@@ -71,6 +72,9 @@ public class AppController {
   private static final String PAGE_REDIRECT_POSTSURVEY = "redirect:postsurvey";
   private static final String PAGE_SUCCESS = "success";
   private static final String PAGE_REDIRECT_SUCCESS = "redirect:success";
+  
+  // TODO: Better to not expose this page?
+  private static final String PAGE_ONETIME_POSTSURVEY = "onetime_postsurvey";
   
   private static final String ATTR_TURKER = "turker";
   private static final String ATTR_MTURK_ID = "mturkId";
@@ -223,9 +227,9 @@ public class AppController {
     model.addAttribute(ATTR_POSTSURVEY_RESPONSE, postsurveyResponse);
     return PAGE_POSTSURVEY;
   }
-    
-  // TODO Remove /test-postsurvey
-  @RequestMapping(value = { "/" + PAGE_POSTSURVEY, "/test-postsurvey" }, method = RequestMethod.POST)
+  
+  @RequestMapping(value = { "/" + PAGE_POSTSURVEY,
+      PAGE_ONETIME_POSTSURVEY }, method = RequestMethod.POST)
   public String processPostsurveyResponse(
       @ModelAttribute(ATTR_POSTSURVEY_RESPONSE) TurkerPostsurveyResponse postsurveyResponse,
       BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
@@ -265,12 +269,12 @@ public class AppController {
     return PAGE_SUCCESS;
   }
 
-  // TODO: This method is for testing only
-  @RequestMapping(value = { "/test-postsurvey" }, method = RequestMethod.GET)
-  public String showPostsurveyForTesting(ModelMap model) {
+  @RequestMapping(value = { PAGE_ONETIME_POSTSURVEY }, method = RequestMethod.GET)
+  public String showOnetimePostsurvey(@RequestParam("mturkid") String mturkId,
+      @RequestParam("bundleid") int bundleId, ModelMap model) {
     TurkerPostsurveyResponse postsurveyResponse = new TurkerPostsurveyResponse();
-    postsurveyResponse.setMturkId("TestingID");
-    postsurveyResponse.setScenarioBundleId(1);
+    postsurveyResponse.setMturkId(mturkId);
+    postsurveyResponse.setScenarioBundleId(bundleId);
     model.addAttribute(ATTR_POSTSURVEY_RESPONSE, postsurveyResponse);
     return PAGE_POSTSURVEY;
   }
@@ -286,7 +290,6 @@ public class AppController {
       nextBundleId = 1;
     }
     
-    System.out.println("Next bundle ID: " + nextBundleId); // TODO: Comment
     return scenarioBundleService.findById(nextBundleId++);
   }
 

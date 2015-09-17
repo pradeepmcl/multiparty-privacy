@@ -110,7 +110,7 @@ CREATE TABLE turker_postsurvey_response (
   no_preference_confidence VARCHAR(20) NOT NULL,
   preference_confidence VARCHAR(20) NOT NULL,
   preference_argument_confidence VARCHAR(20) NOT NULL,
-  additional_attributes VARCHAR(500),
+  additional_attributes VARCHAR(1000),
   email VARCHAR(50),
   other_comments VARCHAR(2000),
   completion_code VARCHAR(20) NOT NULL,
