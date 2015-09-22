@@ -27,9 +27,9 @@ public class TurkerPostsurveyResponseDaoImpl extends AbstractDao<Integer, Turker
     return prevCount + curCount;
   }
   
-  public long getMaxBundleId() {
+  public long getMaxBundleId(int minId) {
     Query query = getSession().createSQLQuery("select ifnull(max(scenario_bundle_id), 0) "
-        + "from turker_postsurvey_response");
+        + "from turker_postsurvey_response where id > " + minId);
     return ((BigInteger) query.uniqueResult()).longValue();
   }
 

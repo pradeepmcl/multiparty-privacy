@@ -1,10 +1,14 @@
 package edu.ncsu.mas.platys.multiparty_privacy.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Locale;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -12,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.ncsu.mas.platys.multiparty_privacy.model.Scenario;
@@ -29,6 +34,7 @@ import edu.ncsu.mas.platys.multiparty_privacy.util.RandomCodeGenerator;
 
 @Controller
 @RequestMapping("/")
+@PropertySource("classpath:application.properties")
 public class AppController {
 
   @Autowired
@@ -48,6 +54,9 @@ public class AppController {
   
   @Autowired
   MessageSource messageSource;
+  
+  @Autowired
+  private Environment env;
 
   // Changing this variable requires that the db be updated accordingly
   private static final int MAX_SCENARIOS = 5;
@@ -63,6 +72,9 @@ public class AppController {
   private static final String PAGE_REDIRECT_POSTSURVEY = "redirect:postsurvey";
   private static final String PAGE_SUCCESS = "success";
   private static final String PAGE_REDIRECT_SUCCESS = "redirect:success";
+  
+  // TODO: Better to not expose this page?
+  private static final String PAGE_ONETIME_POSTSURVEY = "onetime_postsurvey";
   
   private static final String ATTR_TURKER = "turker";
   private static final String ATTR_MTURK_ID = "mturkId";
@@ -147,7 +159,7 @@ public class AppController {
 
   @RequestMapping(value = { "/" + PAGE_QUESTIONNAIRE }, method = RequestMethod.GET)
   public String showQuestionnaire(@ModelAttribute(ATTR_MTURK_ID) String mturkId,
-      BindingResult result, ModelMap model) {
+      BindingResult result, ModelMap model) throws FileNotFoundException, IOException {
     ScenarioBundle bundle = getScenarioBundle();
     String[] scenarios = bundle.getScenariosCsv().split(",");
     int scenarioId = Integer.parseInt(scenarios[0]);
@@ -215,9 +227,9 @@ public class AppController {
     model.addAttribute(ATTR_POSTSURVEY_RESPONSE, postsurveyResponse);
     return PAGE_POSTSURVEY;
   }
-    
-  // TODO Remove /test-postsurvey
-  @RequestMapping(value = { "/" + PAGE_POSTSURVEY, "/test-postsurvey" }, method = RequestMethod.POST)
+  
+  @RequestMapping(value = { "/" + PAGE_POSTSURVEY,
+      PAGE_ONETIME_POSTSURVEY }, method = RequestMethod.POST)
   public String processPostsurveyResponse(
       @ModelAttribute(ATTR_POSTSURVEY_RESPONSE) TurkerPostsurveyResponse postsurveyResponse,
       BindingResult result, ModelMap model, final RedirectAttributes redirectAttributes) {
@@ -257,19 +269,20 @@ public class AppController {
     return PAGE_SUCCESS;
   }
 
-  // TODO: This method is for testing only
-  @RequestMapping(value = { "/test-postsurvey" }, method = RequestMethod.GET)
-  public String showPostsurveyForTesting(ModelMap model) {
+  @RequestMapping(value = { PAGE_ONETIME_POSTSURVEY }, method = RequestMethod.GET)
+  public String showOnetimePostsurvey(@RequestParam("mturkid") String mturkId,
+      @RequestParam("bundleid") int bundleId, ModelMap model) {
     TurkerPostsurveyResponse postsurveyResponse = new TurkerPostsurveyResponse();
-    postsurveyResponse.setMturkId("TestingID");
-    postsurveyResponse.setScenarioBundleId(1);
+    postsurveyResponse.setMturkId(mturkId);
+    postsurveyResponse.setScenarioBundleId(bundleId);
     model.addAttribute(ATTR_POSTSURVEY_RESPONSE, postsurveyResponse);
     return PAGE_POSTSURVEY;
   }
   
-  private ScenarioBundle getScenarioBundle() {
+  private ScenarioBundle getScenarioBundle() throws FileNotFoundException, IOException {
     if (nextBundleId == 0) {
-      nextBundleId = (int) postsurveyResponseService.getMaxBundleId() + 1;
+      nextBundleId = (int) postsurveyResponseService
+          .getMaxBundleId(Integer.parseInt(env.getProperty("db.batch.start.id"))) + 1;
     }
     
     long numBundles = scenarioBundleService.getCount();

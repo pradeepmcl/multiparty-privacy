@@ -25,8 +25,8 @@ public class TurkerPostsurveyResponseServiceImpl implements TurkerPostsurveyResp
   }
   
   @Override
-  public long getMaxBundleId() {
-    return dao.getMaxBundleId();
+  public long getMaxBundleId(int minId) {
+    return dao.getMaxBundleId(minId);
   }
 
 }
