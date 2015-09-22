@@ -23,7 +23,7 @@ insert into argument(image_id, name, description) values
   (1, 'exceptional_case', 'This is not like any other picture; we hired a photographer to take it.'),
   (2, 'positive_consequence', 'It was a lovely evening and this picture brings back good memories.'),
   (2, 'negative_consequence', 'Poor Timmy got scared. I don''t think it is fair to Timmy to share a photo of him crying and scared of his grandpa.'),
-  (2, 'exceptional_case', 'This was the first time Jerry got dressed as Santa Claus.'),
+  (2, 'exceptional_case', 'This was the first time Jerry and Timmy took a picture together.'),
   (3, 'positive_consequence', 'This picture shows that Rose was born peacefully at our home surrounded by those who love us.'),
   (3, 'negative_consequence', 'The idea of giving birth at home was to be at a private place surrounded by only the people we love.'),
   (3, 'exceptional_case', 'This is not like any other family photo; this shows that Rose is coming to our lives.'),
@@ -35,7 +35,7 @@ insert into argument(image_id, name, description) values
   (5, 'exceptional_case', 'This isn''t like any of our other photos. It was our graduation, which happens only once in our lifetimes.'),
   (6, 'positive_consequence', 'Fortunately, none of us got hurt. This picture makes anyone who sees it laugh out loud.'),
   (6, 'negative_consequence', 'People looking at this picture may think that we are reckless drivers, which is not true.'),
-  (6, 'exceptional_case', 'Motorbike stunts is not something we do everyday and a perfect shot like this is one in a million.'),
+  (6, 'exceptional_case', 'Motorbike stunts is not something we do everyday.'),
   (7, 'positive_consequence', 'This was one of the best day of our lives; we should share these good memories with others.'),
   (7, 'negative_consequence', 'There were some girls in the party; people might understand things the wrong way.'),
   (7, 'exceptional_case', 'This isn''t like any of our other photos. This was Mark''s bachelor party!'),
@@ -47,13 +47,13 @@ insert into argument(image_id, name, description) values
   (9, 'exceptional_case', 'This is an exceptional event since we attended a professional party for the first time.'),
   (10,'positive_consequence', 'The picture shows the difficult situation in which the survivors live. Sharing this can encourage people to help.'),
   (10, 'negative_consequence', 'Tsunami was a disaster and our gestures are not appropriate. People may get the wrong idea.'),
-  (10, 'exceptional_case', 'This was one of the worst natural disasters. This picture shows that people from all over the world volunteer to help.'),
+  (10, 'exceptional_case', 'This was one of the worst natural disasters.'),
   (11, 'positive_consequence', 'People think that I have a boring life because I work at a boring place; this will prove them wrong.'),
   (11, 'negative_consequence', 'This is embarrassing; people will pick on us because of this picture.'),
   (11, 'exceptional_case', 'This is an exceptional event since a Christmas party happens only once a year.'),
   (12, 'positive_consequence', 'This new shift policy is too demanding. A photo like this can convince the management to change the policy.'),
   (12, 'negative_consequence', 'If people think that we sleep on our job, they won''t trust the hospital.'),
-  (12, 'exceptional_case', 'A doctor sleeping on a chair is exceptional. This photo shows that what is happening in this hospital is not normal.');
+  (12, 'exceptional_case', 'A doctor sleeping on a chair is exceptional.');
 
  insert into spotcheck_question(name, question, options, options_type, answer) values
    ('which_not_sns', 'Which of the following is not a social network site?', 'Facebook,Google Plus,Windows,Twitter', 'radio', 'Windows'),

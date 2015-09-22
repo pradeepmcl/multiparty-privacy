@@ -16,9 +16,15 @@ public class TurkerPostsurveyResponseDaoImpl extends AbstractDao<Integer, Turker
   }
 
   public long getResponseCount(String mturkId) {
-    Query query = getSession().createSQLQuery("select count(id) from turker_postsurvey_response "
+    Query query1 = getSession().createSQLQuery("select count(id) from turker_postsurvey_response "
         + "where mturk_id = '" + mturkId + "'");
-    return ((BigInteger) query.uniqueResult()).longValue();
+    long curCount = ((BigInteger) query1.uniqueResult()).longValue();
+    
+    Query query2 = getSession().createSQLQuery("select count(id) from previous_turker "
+        + "where mturk_id = '" + mturkId + "'");
+    long prevCount = ((BigInteger) query2.uniqueResult()).longValue();
+    
+    return prevCount + curCount;
   }
   
   public long getMaxBundleId() {

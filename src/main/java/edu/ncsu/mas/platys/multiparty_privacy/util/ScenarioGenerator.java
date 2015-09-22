@@ -9,9 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * This is a utility class meant to run before the webapp is used. The class
@@ -40,6 +42,9 @@ public class ScenarioGenerator {
       Map<Integer, String> policies = getPolicies(stmt);
 
       insertScenarios(conn, images, policies, arguments);
+      
+      fixScenarioForExceptionalCaseArgument(conn); // TODO: This is temporary
+      
     } catch (IllegalStateException | SQLException e) {
       e.printStackTrace();
     }
@@ -130,6 +135,63 @@ public class ScenarioGenerator {
       stmt.executeBatch();
     }
   }
+  
+  /**
+   * This method was introduced to identify some scenarios that we identified to
+   * be faulty after two batches of the study
+   * 
+   * @param conn
+   *          Database connection
+   * @param faultyArgPolicyCombIds
+   * @return
+   * @throws SQLException
+   */
+  public Set<Integer> findFaultyScenarios(Connection conn,
+      Map<Integer, Integer> faultyArgPolicyCombIds) throws SQLException {
+    Set<Integer> faultyScenarioIds = new HashSet<Integer>();
+
+    Statement stmt = conn.createStatement();
+    Map<Integer, String> images = getImages(stmt);
+    Map<Integer, Map<Integer, String>> arguments = getArguments(stmt);
+    Map<Integer, String> policies = getPolicies(stmt);
+
+    int i = 0;
+    for (Integer imageId : images.keySet()) {
+      Map<Integer, String> argumentsForImage = arguments.get(imageId);
+      for (Integer policyAId : policies.keySet()) {
+        String policyAName = policies.get(policyAId);
+        for (Integer argumentAId : argumentsForImage.keySet()) {
+          String argumentAName = argumentsForImage.get(argumentAId);
+          for (Integer policyBId : policies.keySet()) {
+            String policyBName = policies.get(policyBId);
+            for (Integer argumentBId : argumentsForImage.keySet()) {
+              String argumentBName = argumentsForImage.get(argumentBId);
+              for (Integer policyCId : policies.keySet()) {
+                String policyCName = policies.get(policyCId);
+                for (Integer argumentCId : argumentsForImage.keySet()) {
+                  String argumentCName = argumentsForImage.get(argumentCId);
+                  if (isCombinationValid(policyAName, policyBName, policyCName, argumentAName,
+                      argumentBName, argumentCName)) {
+                    i++;
+                    for (int faultyArgId : faultyArgPolicyCombIds.keySet()) {
+                      int faultyPolicyId = faultyArgPolicyCombIds.get(faultyArgId);
+                      if ((argumentAId == faultyArgId && policyAId == faultyPolicyId)
+                          || (argumentBId == faultyArgId && policyBId == faultyPolicyId)
+                          || (argumentCId == faultyArgId && policyCId == faultyPolicyId)) {
+                        faultyScenarioIds.add(i);
+                        break;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return faultyScenarioIds;
+  }
 
   private boolean isCombinationValid(String policyAName, String policyBName, String policyCName,
       String argAName, String argBName, String argCName) {
@@ -143,6 +205,12 @@ public class ScenarioGenerator {
     return false;
   }
 
+  /*
+   * This function is incorrect: exceptional_case and common is invalid.
+   * However, I cannot fix it in the middle of the experiment. Hence the
+   * temporary function fixScenarioForExceptionalCaseArgument. TODO; Fix it
+   * later
+   */
   private boolean isPolicyArgumentCombinationValid(String policyName, String argumentName) {
     if ((argumentName.equals("positive_consequence") && policyName.equals("self"))
         || (argumentName.equals("negative_consequence") && policyName.equals("all"))
@@ -150,6 +218,24 @@ public class ScenarioGenerator {
       return false;
     }
     return true;
+  }
+  
+  /*
+   * This is a temporary fix. Check the comment for isPolicyArgumentCombinationValid
+   */
+  private void fixScenarioForExceptionalCaseArgument(Connection conn) throws SQLException {
+    String[] argColNames = new String[] { "argument_a_id", "argument_b_id", "argument_c_id" };
+    String[] policyColNames = new String[] { "policy_a_id", "policy_b_id", "policy_c_id" };
+    for (int i = 0; i < 3; i++) {
+      try (PreparedStatement stmt = conn.prepareStatement("update multiparty_privacy.scenario set "
+          + policyColNames[i] + " = 3 where " + argColNames[i] + " = ? and " + policyColNames[i]
+          + " = 2;");) {
+        for (int argId = 3; argId <= 36; argId += 3) {
+          stmt.setInt(1, argId);
+          stmt.executeUpdate();
+        }
+      }
+    }
   }
 
   private boolean isPolicyCombinationValid(String... policyNames) {
