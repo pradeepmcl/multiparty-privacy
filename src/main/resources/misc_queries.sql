@@ -53,3 +53,13 @@ select image_sentiment
 from turker_picturesurvey_response
 where scenario_id in (select id from scenario where image_id in (2,4,6,8,10,12))
 into outfile '/tmp/neg_senti.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
+# Count agreement
+select count(*) from (
+  select scenario_id 
+  from turker_picturesurvey_response 
+  group by scenario_id 
+  having group_concat(case1_policy) in (
+    'a,a', 'a,a,a', 'b,b', 'b,b,b', 'c,c', 'c,c,c', 'other,other', 'other,other,other'
+  )
+) as T;
